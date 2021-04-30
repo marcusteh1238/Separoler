@@ -1,12 +1,13 @@
 const { SEPAROLER_CONFIG_OPTIONS, NUMBER_EMOJIS } = require("../../helpers/constants");
 
 function viewConfig(message, config) {
-    const fields = Object.entries(SEPAROLER_CONFIG_OPTIONS).map(([key, { FRIENDLY_NAME, DESCRIPTION }], index) => {
+    const fields = Object.entries(SEPAROLER_CONFIG_OPTIONS).map(([key, { FRIENDLY_NAME, DESCRIPTION, OPTIONS }], index) => {
         const k = key.toLowerCase();
         const configVal = config[k];
-        const value = `__Current Setting__: \`${configVal}\`\n${DESCRIPTION}`;
+        const optionsStr = OPTIONS.map(option => `\`${option}\``).join(', ');
+        const value = `__Current Setting__: \`${configVal}\`\n__Available Settings__: ${optionsStr}\n${DESCRIPTION}`;
         return {
-            name: `${NUMBER_EMOJIS[index + 1]} ${FRIENDLY_NAME}`,
+            name: `${NUMBER_EMOJIS[index + 1]} ${FRIENDLY_NAME} <\`${k}\`>`,
             value
         }
     });
@@ -17,7 +18,7 @@ function viewConfig(message, config) {
             fields,
             footer: {
                 iconURL: message.author.avatarURL({ dynamic: true, size: 128 }),
-                text: `Enter "s!config edit" to edit this server's Separoler configuration.`
+                text: `Enter "s!config edit <policy> <setting>" to change this server's Separoler configuration.`
             }
         }
     });
