@@ -1,0 +1,32 @@
+{
+    "extends": ["airbnb-base", "prettier"],
+    "globals": {
+        "BigInt": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 11
+    },
+    "rules": {
+        "no-use-before-define": "off",
+        "import/no-anonymous-default-export": [
+            "error",
+            {
+                "allowArray": false,
+                "allowArrowFunction": false,
+                "allowAnonymousClass": false,
+                "allowAnonymousFunction": false,
+                "allowCallExpression": true,
+                "allowLiteral": false,
+                "allowObject": false
+            }
+        ],
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allow": ["__register", "__callback", "__mustRegister"]
+            }
+        ],
+        "camelcase": "off",
+        "no-console": "error"
+    }
+}

@@ -10,7 +10,9 @@
   "author": "marcusteh1238",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^7.25.0"
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0"
   },
   "dependencies": {
     "discord.js": "^12.5.3",
