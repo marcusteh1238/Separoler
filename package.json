@@ -4,6 +4,7 @@
   "description": "role divider bot with some allowed configuration",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon -r dotenv-safe/config index.js | pino-pretty -l -t HH:MM:ss",
     "lint": "eslint --fix --ignore-path .gitignore .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,11 +13,14 @@
   "devDependencies": {
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^8.3.0"
+    "eslint-config-prettier": "^8.3.0",
+    "nodemon": "^2.0.7",
+    "pino-pretty": "^4.7.1"
   },
   "dependencies": {
     "discord.js": "^12.5.3",
     "dotenv-safe": "^8.2.0",
-    "pino": "^6.11.3"
+    "pino": "^6.11.3",
+    "require-all": "^3.0.0"
   }
 }
