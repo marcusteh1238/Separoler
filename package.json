@@ -1,0 +1,11 @@
+{
+  "name": "separoler",
+  "version": "1.0.0",
+  "description": "role divider bot with some allowed configuration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "marcusteh1238",
+  "license": "ISC"
+}
