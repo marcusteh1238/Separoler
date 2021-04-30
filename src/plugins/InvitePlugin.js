@@ -15,7 +15,8 @@ async function handle(message) {
 const InvitePlugin = new Plugin({
     name: "invite",
     aliases: ["inv", "separoler"],
-    handle
+    handle,
+    noDMs: false
 });
 
 module.exports = InvitePlugin;

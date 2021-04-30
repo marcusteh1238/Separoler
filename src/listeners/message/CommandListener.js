@@ -40,7 +40,12 @@ async function CommandListener(message) {
 
     const cmdWord = match[1].toLowerCase();
     const plugin = pluginActivators[cmdWord];
+    // plugin does not exist.
     if (!plugin) {
+        return;
+    }
+    // plugins that cannot work in DMs shouldn't be activated.
+    if (plugin.noDMs && !plugin.guild.available) {
         return;
     }
     const args = match[2] ? match[2].trim().split(" ") : [];
