@@ -45,7 +45,7 @@ async function CommandListener(message) {
         return;
     }
     // plugins that cannot work in DMs shouldn't be activated.
-    if (plugin.noDMs && !plugin.guild.available) {
+    if (plugin.noDMs && !message.guild.available) {
         return;
     }
     const args = match[2] ? match[2].trim().split(" ") : [];
