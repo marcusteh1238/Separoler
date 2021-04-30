@@ -3,7 +3,7 @@ const constants = {
     BOT_PERMISSIONS: 3020286145,
     SEPAROLER_CONFIG_OPTIONS: {
         TOP: {
-            FRIENDLY_NAME: "Top-most Separoles to Keep",
+            FRIENDLY_NAME: "Top-most Separoles",
             DESCRIPTION: "Policy when Separoles are the highest role that a user has.",
             OPTIONS: [
                 "none",
@@ -13,7 +13,7 @@ const constants = {
             DEFAULT: "none"
         },
         MID: {
-            FRIENDLY_NAME: "Middle Separoles to Keep",
+            FRIENDLY_NAME: "Middle Separoles",
             DESCRIPTION: "Policy when the user has Separoles in-between other Discord roles.",
             OPTIONS: [
                 "keep",
@@ -22,7 +22,7 @@ const constants = {
             DEFAULT: "keep"
         },
         MIDGROUP: {
-            FRIENDLY_NAME: "Grouped Middle Separoles to Keep",
+            FRIENDLY_NAME: "Grouped Middle Separoles",
             DESCRIPTION: "Policy when the user has a bunch of Separoles grouped together in-between other Discord roles.",
             OPTIONS: [
                 "all",
@@ -33,7 +33,7 @@ const constants = {
             DEFAULT: "all"
         },
         BOTTOM: {
-            FRIENDLY_NAME: "Bottom-most Separoles to Keep",
+            FRIENDLY_NAME: "Bottom-most Separoles",
             DESCRIPTION: "Policy when Separoles are the lowest role that a user has.",
             OPTIONS: [
                 "none",
