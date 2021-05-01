@@ -32,7 +32,22 @@ async function setSeparoleConfig(serverId, newConfig) {
     separoleConfig[serverId] = newConfig;
 }
 
+// SEPAROLE LIST
+const separolesObj = {};
+async function getSeparoleList(serverId) {
+    if (!separolesObj[serverId]) {
+        separolesObj[serverId] = [];
+    }
+    return separolesObj[serverId];
+}
+
+async function setSeparoleList(serverId, separoleList) {
+    separolesObj[serverId] = separoleList;
+}
+
 module.exports = {
     getSeparoleConfig,
-    setSeparoleConfig
+    setSeparoleConfig,
+    getSeparoleList,
+    setSeparoleList
 }
