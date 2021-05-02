@@ -70,10 +70,10 @@ async function SeparoleHandler(guild, member, {separoleStrArr, config} = {}) {
     }
 
     if (promises.length === 0) return;
-    
+
     try {
         await Promise.all(promises);
-        logger.info(getDebugObj("Updating separoles", guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove));
+        logger.debug(getDebugObj("Updating separoles", guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove));
     } catch (err) {
         logger.error(getDebugObj("Error occurred when updating separoles", guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove));
     }
