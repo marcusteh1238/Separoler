@@ -22,7 +22,7 @@ async function handle(message, args) {
 
 const SeparolePlugin = new Plugin({
     name: "separoles",
-    aliases: ["separole", "separoler"],
+    aliases: ["sr", "separole", "separoler"],
     handle,
     noDMs: true
 });
