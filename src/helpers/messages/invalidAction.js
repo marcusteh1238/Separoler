@@ -1,9 +1,11 @@
+const { error_red } = require("../colors");
+
 async function invalidAction(message, description) {
     return message.channel.send({
         embed: {
             title: "Invalid Action!",
             description,
-            color: 16711680
+            color: error_red
         }
     })
 }
