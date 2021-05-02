@@ -1,8 +1,9 @@
+// https://coolors.co/5d9cec-4fc1e9-48cfad-a0d468-ffce54-fc6e51-ed5565-ac92ec-ec87c0
 const colors = {
-    success_green: "#1ed760",
-    error_red: "#be1818",
-    unsure_yellow: "#f7f700",
-    info_lavendar: "#8d62c0"
+    success_green: "#a0d468",
+    error_red: "#ed5565",
+    unsure_yellow: "#ffce54",
+    info_lavendar: "#ac92ec"
 }
 
 module.exports = colors;
