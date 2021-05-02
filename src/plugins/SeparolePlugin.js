@@ -2,6 +2,7 @@ const getCurrentSeparoles = require("../helpers/getCurrentSeparoles");
 const Plugin = require("../structs/Plugin");
 const viewSeparoles = require("./separole/view");
 const addSeparoles = require("./separole/add");
+const removeSeparoles = require("./separole/remove");
 const invalidCommand = require("../helpers/messages/invalidCommand");
 
 async function handle(message, args) {
@@ -16,6 +17,9 @@ async function handle(message, args) {
     }
     if (["add"].includes(firstArg)) {
         return addSeparoles(message, args.slice(1), separoles)
+    }
+    if (["remove"].includes(firstArg)) {
+        return removeSeparoles(message, args.slice(1), separoles)
     }
     return invalidCommand(message, "separoles");
 }
