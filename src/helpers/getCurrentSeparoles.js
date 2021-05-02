@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const { Guild, Role } = require("discord.js");
 const { setSeparoleList, getSeparoleList } = require("../DatabaseWrapper");
 
