@@ -3,6 +3,7 @@ const colors = {
     success_green: "#a0d468",
     error_red: "#ed5565",
     unsure_yellow: "#ffce54",
+    warning_orange: "#fc6e51",
     info_lavendar: "#ac92ec"
 }
 
