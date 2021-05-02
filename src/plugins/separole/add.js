@@ -3,11 +3,15 @@ const { setSeparoleList } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const { MAX_SEPAROLES } = require("../../helpers/constants");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
+const isSeparoleManager = require("../../helpers/isSeparoleManager");
 const logger = require("../../helpers/logger");
 const errorOccured = require("../../helpers/messages/errorOccurred");
 const invalidAction = require("../../helpers/messages/invalidAction");
 
 async function addSeparole(message, args, separoles) {
+    if (!isSeparoleManager(message.member)) {
+        return invalidAction(message, `You need Manage Server Permissions to add Separoles to **${message.guild.name}**.`)
+    }
     const maxSeparoles = MAX_SEPAROLES.DEFAULT;
     if (separoles.length >= maxSeparoles) {
         return invalidAction(message, `You already have the maximum number of **${maxSeparoles}** Separoles. Remove a pre-existing Separole before adding a new one!`)

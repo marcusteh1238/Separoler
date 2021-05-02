@@ -2,11 +2,15 @@ const Fuse = require("fuse.js");
 const { setSeparoleList } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
+const isSeparoleManager = require("../../helpers/isSeparoleManager");
 const logger = require("../../helpers/logger");
 const errorOccured = require("../../helpers/messages/errorOccurred");
 const invalidAction = require("../../helpers/messages/invalidAction");
 
 async function removeSeparole(message, args, separoles) {
+    if (!isSeparoleManager(message.member)) {
+        return invalidAction(message, `You need Manage Server Permissions to remove Separoles from **${message.guild.name}**.`)
+    }
     let queryStr = args.join(' ');
     // extract snowflake from mention.
     const mentionRegex = /^(?:<@&?)?(\d+)>?$/;

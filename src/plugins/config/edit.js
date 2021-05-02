@@ -1,13 +1,18 @@
 const { setSeparoleConfig } = require("../../DatabaseWrapper");
+const { error_red, success_green } = require("../../helpers/colors");
 const { SEPAROLER_CONFIG_OPTIONS } = require("../../helpers/constants");
+const isSeparoleManager = require("../../helpers/isSeparoleManager");
 const logger = require("../../helpers/logger");
 const invalidAction = require("../../helpers/messages/invalidAction");
 
 const policyKeys = Object.keys(SEPAROLER_CONFIG_OPTIONS).map(key => key.toLowerCase());
 
 async function editConfig(message, args, config) {
+    if (!isSeparoleManager(message.member)) {
+        return invalidAction(message, `You need Manage Server Permissions to edit **${message.guild.name}'s** Separoler configuration.`)
+    }
     if (!args[0]) {
-        return invalidAction(message, "Please specify a policy and an option to change this server's Separoler configuration. You can view the full list of Configuration policies at `s!config`.");
+        return invalidAction(message, `Please specify a policy and an option to change **${message.guild.name}'s** Separoler configuration. You can view the full list of Configuration policies at \`s!config\`.`);
     }
     const firstArg = args[0].toLowerCase();
     const policyKeysStr = policyKeys.map(str => `\`${str}\``).join(', ')
@@ -42,7 +47,8 @@ async function editConfig(message, args, config) {
             return message.channel.send({
                 embed: {
                     title: "Error Occurred!",
-                    description: "Sorry, an error occurred while trying to change this server's Separoler configuration."
+                    description: "Sorry, an error occurred while trying to change this server's Separoler configuration.",
+                    color: error_red
                 }
             });
         }
@@ -63,7 +69,7 @@ async function editConfig(message, args, config) {
         embed: {
             title: "Configuration Changed Successfully!",
             fields,
-            color: 32768
+            color: success_green
         }
     })
 
