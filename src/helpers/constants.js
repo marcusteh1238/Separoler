@@ -1,6 +1,10 @@
 const constants = {
     BOT_ID: process.env.BOT_ID,
     BOT_PERMISSIONS: 3020286145,
+    MAX_SEPAROLES: {
+        DEFAULT: 5,
+        SUPPORTER: 10
+    },
     SEPAROLER_CONFIG_OPTIONS: {
         TOP: {
             FRIENDLY_NAME: "Top-most Separoles",
