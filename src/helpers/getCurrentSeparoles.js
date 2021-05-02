@@ -22,7 +22,7 @@ async function getCurrentSeparoles(guild, separolesList) {
         .map(async separole => roleManager.fetch(separole)))
     const presentSeparoles = allRoles.filter(role => role);
     if (presentSeparoles.length === separolesList.length) {
-        return separolesList;
+        return presentSeparoles;
     }
     const roleIds = presentSeparoles.map(role => role.id);
     await setSeparoleList(guild.id, roleIds);
