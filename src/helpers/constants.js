@@ -10,6 +10,7 @@ const constants = {
             FRIENDLY_NAME: "Top-most Separoles",
             DESCRIPTION: "Policy when Separoles are the highest role that a user has.",
             OPTIONS: [
+                "all",
                 "none",
                 "lowest",
                 "highest"
@@ -30,7 +31,6 @@ const constants = {
             DESCRIPTION: "Policy when the user has a bunch of Separoles grouped together in-between other Discord roles.",
             OPTIONS: [
                 "all",
-                "none",
                 "lowest",
                 "highest"
             ],
@@ -40,6 +40,7 @@ const constants = {
             FRIENDLY_NAME: "Bottom-most Separoles",
             DESCRIPTION: "Policy when Separoles are the lowest role that a user has.",
             OPTIONS: [
+                "all",
                 "none",
                 "lowest",
                 "highest"
