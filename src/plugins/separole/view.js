@@ -17,7 +17,7 @@ async function viewSeparoles(message, separoles) {
     const roleString = separoles.map((role, index) => {
         const mention = `<@&${role.id}>`;
         const pos = role.rawPosition;
-        return `${index + 1}. ${mention} - Position ${pos}`
+        return `${index + 1}. ${mention} - (Position \`#${pos}\`)`
     }).join('\n');
     const footerText = `${message.guild.name} currently has ${separoles.length} out of ${MAX_SEPAROLES.DEFAULT} maximum allowed Separoles.`
     return message.channel.send({
