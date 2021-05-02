@@ -1,12 +1,17 @@
 const Fuse = require("fuse.js");
 const { setSeparoleList } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
+const { MAX_SEPAROLES } = require("../../helpers/constants");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
 const logger = require("../../helpers/logger");
 const errorOccured = require("../../helpers/messages/errorOccurred");
 const invalidAction = require("../../helpers/messages/invalidAction");
 
 async function addSeparole(message, args, separoles) {
+    const maxSeparoles = MAX_SEPAROLES.DEFAULT;
+    if (separoles.length >= maxSeparoles) {
+        return invalidAction(message, `You already have the maximum number of **${maxSeparoles}** Separoles. Remove a pre-existing Separole before adding a new one!`)
+    }
     let queryStr = args.join(' ');
     // extract snowflake from mention.
     const mentionRegex = /^(?:<@&?)?(\d+)>?$/;
