@@ -1,4 +1,5 @@
 const { SEPAROLER_CONFIG_OPTIONS, NUMBER_EMOJIS } = require("../../helpers/constants");
+const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
 
 function viewConfig(message, config) {
     const fields = Object.entries(SEPAROLER_CONFIG_OPTIONS).map(([key, { FRIENDLY_NAME, DESCRIPTION, OPTIONS }], index) => {
@@ -17,7 +18,7 @@ function viewConfig(message, config) {
             description: `Here is the current configuration for **${message.guild.name}**. Each of these policies handle whether Separoles are kept or removed.`,
             fields,
             footer: {
-                iconURL: message.author.avatarURL({ dynamic: true, size: 128 }),
+                iconURL: getUserAvatarURL(message.author),
                 text: `Enter "s!config edit <policy> <setting>" to change this server's Separoler configuration.`
             }
         }
