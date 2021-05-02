@@ -56,7 +56,12 @@ async function CommandListener(message) {
     const args = match[2] ? match[2].trim().split(" ") : [];
     // TODO: handle cooldowns.
     try {
-        await plugin.handle(message, args);
+        // "s!command help"
+        if (args[0].toLowerCase() === "help") {
+            await pluginActivators.help.handle(message, [cmdWord]);
+        } else {
+            await plugin.handle(message, args);
+        }
     } catch (err) {
         logger.error({
             msg: `Error occurred in plugin: ${plugin.name}`,
