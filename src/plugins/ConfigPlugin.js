@@ -1,4 +1,5 @@
 const { getSeparoleConfig } = require("../DatabaseWrapper");
+const { PLUGIN_TYPES } = require("../helpers/constants");
 const invalidCommand = require("../helpers/messages/invalidCommand");
 const Plugin = require("../structs/Plugin");
 const editConfig = require("./config/edit");
@@ -23,6 +24,16 @@ async function handle(message, args) {
 const ConfigPlugin = new Plugin({
     name: "config",
     aliases: ["configuration", "settings"],
+    type: PLUGIN_TYPES[0],
+    help: {
+        description: "View or edit the current Separoler policy settings for this server. Each policy specifies which Separoles to display on a user.",
+        usage: "s!config [edit <policy> <setting>]",
+        examples: [
+            ["s!config", "Displays the current Separoler policy settings."],
+            ["s!config edit top all", "If there are Separoles that have a higher position than all of the user's current roles, all of them should be added to the user."],
+            ["s!config edit midgroup lowest", "If there are Separoles grouped together in-between other roles, only the lowest one should be shown."]
+        ]
+    },
     handle,
     noDMs: true
 });

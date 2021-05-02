@@ -4,6 +4,7 @@ const viewSeparoles = require("./separole/view");
 const addSeparoles = require("./separole/add");
 const removeSeparoles = require("./separole/remove");
 const invalidCommand = require("../helpers/messages/invalidCommand");
+const { PLUGIN_TYPES } = require("../helpers/constants");
 
 async function handle(message, args) {
     const separoles = await getCurrentSeparoles(message.guild);
@@ -18,7 +19,7 @@ async function handle(message, args) {
     if (["add"].includes(firstArg)) {
         return addSeparoles(message, args.slice(1), separoles)
     }
-    if (["remove"].includes(firstArg)) {
+    if (["remove", "rm"].includes(firstArg)) {
         return removeSeparoles(message, args.slice(1), separoles)
     }
     return invalidCommand(message, "separoles");
@@ -26,8 +27,18 @@ async function handle(message, args) {
 
 const SeparolePlugin = new Plugin({
     name: "separoles",
-    aliases: ["sr", "separole", "separoler"],
+    aliases: ["sr", "separole", "separoler", "eparole"],
     handle,
+    type: PLUGIN_TYPES[0],
+    help: {
+        description: "View the current list of Separoles, or edit the list of Separoles.",
+        usage: "s!separoles [add <role> | remove <role>]",
+        examples: [
+            ["s!separoles", "Displays the list of Separoles in the current server."],
+            ["s!separoles add Awesome", `Adds the "Awesome" role to the list of Separoles.`],
+            ["s!separoles remove @MentionableRole", `Removes the @MentionableRole role from the list of Separoles.`]
+        ]
+    },
     noDMs: true
 });
 

@@ -1,4 +1,4 @@
-const { BOT_ID, BOT_PERMISSIONS } = require("../helpers/constants");
+const { BOT_ID, BOT_PERMISSIONS, PLUGIN_TYPES } = require("../helpers/constants");
 const Plugin = require("../structs/Plugin");
 
 async function handle(message) {
@@ -15,6 +15,14 @@ async function handle(message) {
 const InvitePlugin = new Plugin({
     name: "invite",
     aliases: ["inv", "separoler"],
+    type: PLUGIN_TYPES[1],
+    help: {
+        description: "Get Separoler's Invite link so you can add me to your server :3",
+        usage: "s!invite",
+        examples: [
+            ["s!invite", "Get my invite link. Now. Do it."]
+        ]
+    },
     handle,
     noDMs: false
 });

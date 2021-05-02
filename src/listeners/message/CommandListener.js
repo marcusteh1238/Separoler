@@ -1,6 +1,9 @@
 const path = require("path");
 const requireAll = require("require-all");
+
+const HelpPlugin = require("../../structs/HelpPlugin");
 const logger = require("../../helpers/logger");
+
 
 const prefix = process.env.PREFIX;
 const mainRegex = " *([a-z0-9]+)(?: ((?:\\s|\\S)+))?$";
@@ -9,6 +12,8 @@ const plugins = requireAll({
     dirname: path.resolve("src/plugins"),
     filter: /.+Plugin\.js$/
 });
+
+plugins.HelpPlugin = new HelpPlugin(plugins);
 
 const pluginActivators = Object.values(plugins).reduce((allActivators, plugin) => {
     const words = [plugin.name].concat(plugin.aliases);

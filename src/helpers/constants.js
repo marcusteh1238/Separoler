@@ -48,6 +48,10 @@ const constants = {
             DEFAULT: "none"
         }
     },
+    PLUGIN_TYPES: [
+        "Separole Settings",
+        "Miscellaneous"
+    ],
     NUMBER_EMOJIS: [
         ":zero:",
         ":one:",
