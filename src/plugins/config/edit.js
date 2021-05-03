@@ -33,9 +33,9 @@ async function editConfig(message, args, config) {
         return invalidAction(message, `Invalid policy option specified for the policy \`${secondArg}\`. The options for this policy are: ${policyOptionsStr}`);
     }
     // if policy has changed.
-    if (config.separole[firstArg] !== secondArg) {
+    if (config[firstArg] !== secondArg) {
         const newConfig = JSON.parse(JSON.stringify(config));
-        newConfig.separole[firstArg] = secondArg;
+        newConfig[firstArg] = secondArg;
         try {
             await setSeparoleConfig(message.guild.id, newConfig);
         } catch (err) {
@@ -61,7 +61,7 @@ async function editConfig(message, args, config) {
         },
         {
             name: "Setting Changed",
-            value: `\`${config.separole[firstArg]}\` => \`${secondArg}\``
+            value: `\`${config[firstArg]}\` => \`${secondArg}\``
         }
     ]
 
