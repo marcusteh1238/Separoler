@@ -57,7 +57,7 @@ async function CommandListener(message) {
     // TODO: handle cooldowns.
     try {
         // "s!command help"
-        if (args[0].toLowerCase() === "help") {
+        if (args[0] && args[0].toLowerCase() === "help") {
             await pluginActivators.help.handle(message, [cmdWord]);
         } else {
             await plugin.handle(message, args);
