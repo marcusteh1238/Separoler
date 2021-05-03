@@ -7,16 +7,18 @@ const DEFAULT_PREFIX = process.env.PREFIX;
 
 async function getBaseConfig(guildId) {
     const query = `
-    WITH existing as (
+    WITH new_row as (
     INSERT INTO guild_base_config
     (guild_id, prefix)
-    SELECT $1::snowflake, NULL
+    SELECT $1::varchar, NULL
     WHERE
         NOT EXISTS (
             SELECT * FROM guild_base_config WHERE guild_id = $1
         )
-    RETURNING (guild_id, prefix))
-SELECT (guild_id::varchar, prefix) FROM guild_base_config WHERE guild_id = $1
+    RETURNING (prefix))
+    SELECT (prefix) FROM guild_base_config WHERE guild_id = $1
+    UNION
+    SELECT (prefix) FROM new_row;
 `
     const { rows } = await pool.query(query, [guildId]);
     const [row] = rows;
