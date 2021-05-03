@@ -4,14 +4,12 @@ const { SEPAROLER_CONFIG_OPTIONS } = require("./helpers/constants");
 
 const separoleConfig = {};
 const DEFAULT_SEPAROLE_CONFIG = {
-    separole: {
-        top: SEPAROLER_CONFIG_OPTIONS.TOP.DEFAULT,
-        mid: SEPAROLER_CONFIG_OPTIONS.MID.DEFAULT,
-        midgroup: SEPAROLER_CONFIG_OPTIONS.MIDGROUP.DEFAULT,
-        bottom: SEPAROLER_CONFIG_OPTIONS.BOTTOM.DEFAULT
-    },
-    prefix: process.env.PREFIX
-}
+    top: SEPAROLER_CONFIG_OPTIONS.TOP.DEFAULT,
+    mid: SEPAROLER_CONFIG_OPTIONS.MID.DEFAULT,
+    midgroup: SEPAROLER_CONFIG_OPTIONS.MIDGROUP.DEFAULT,
+    bottom: SEPAROLER_CONFIG_OPTIONS.BOTTOM.DEFAULT
+};
+
 async function getSeparoleConfig(serverId) {
     if (!separoleConfig[serverId]) {
         await setSeparoleConfig(serverId, DEFAULT_SEPAROLE_CONFIG);
@@ -45,9 +43,24 @@ async function setSeparoleList(serverId, separoleList) {
     separolesObj[serverId] = separoleList;
 }
 
+const baseConfigs = {
+}
+async function getBaseConfig(guildId) {
+    if (!baseConfigs[guildId]) {
+        await setBaseConfig(guildId, {config: "s!"});
+    }
+    return baseConfigs[guildId];
+}
+
+async function setBaseConfig(guildId, config) {
+    baseConfigs[guildId] = config;
+}
+
 module.exports = {
     getSeparoleConfig,
     setSeparoleConfig,
     getSeparoleList,
-    setSeparoleList
+    setSeparoleList,
+    getBaseConfig,
+    setBaseConfig
 }

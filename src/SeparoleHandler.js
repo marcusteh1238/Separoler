@@ -43,10 +43,10 @@ async function SeparoleHandler(guild, member, {separoleStrArr, config} = {}) {
     // separate into groups.
     const groups = getSeparoleGroups(userWithAllSeparoles);
     // apply policy based on server config to get roles that are supposed to be equipped.
-    const newBottom = performPolicyOnRoles(groups.bottom, serverConfig.separole.bottom);
-    const newTop = performPolicyOnRoles(groups.top, serverConfig.separole.top);
-    const newMid = performPolicyOnRoles(groups.mid, serverConfig.separole.mid)
-        .map(arr => performPolicyOnRoles(arr, serverConfig.separole.midgroup))
+    const newBottom = performPolicyOnRoles(groups.bottom, serverConfig.bottom);
+    const newTop = performPolicyOnRoles(groups.top, serverConfig.top);
+    const newMid = performPolicyOnRoles(groups.mid, serverConfig.mid)
+        .map(arr => performPolicyOnRoles(arr, serverConfig.midgroup))
         .flat();
 
     // get roles to add and remove.
