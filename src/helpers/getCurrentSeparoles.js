@@ -12,7 +12,7 @@ const { setSeparoleList, getSeparoleList } = require("../DatabaseWrapper");
 async function getCurrentSeparoles(guild, separolesList) {
     if (!separolesList) {
         // eslint-disable-next-line no-param-reassign
-        separolesList = await getSeparoleList(guild.id);
+        separolesList = (await getSeparoleList(guild.id)).separoles;
     }
     if (!separolesList || separolesList.length === 0) {
         return [];
