@@ -1,59 +1,120 @@
 // SEPAROLE CONFIG
-
+const { pool } = require("./db/Database");
 const { SEPAROLER_CONFIG_OPTIONS } = require("./helpers/constants");
+const logger = require("./helpers/logger");
 
-const separoleConfig = {};
-const DEFAULT_SEPAROLE_CONFIG = {
-    top: SEPAROLER_CONFIG_OPTIONS.TOP.DEFAULT,
-    mid: SEPAROLER_CONFIG_OPTIONS.MID.DEFAULT,
-    midgroup: SEPAROLER_CONFIG_OPTIONS.MIDGROUP.DEFAULT,
-    bottom: SEPAROLER_CONFIG_OPTIONS.BOTTOM.DEFAULT
-};
+const DEFAULT_PREFIX = process.env.PREFIX;
 
-async function getSeparoleConfig(serverId) {
-    if (!separoleConfig[serverId]) {
-        await setSeparoleConfig(serverId, DEFAULT_SEPAROLE_CONFIG);
+async function getBaseConfig(guildId) {
+    const query = `
+    WITH existing as (
+    INSERT INTO guild_base_config
+    (guild_id, prefix)
+    SELECT $1::snowflake, NULL
+    WHERE
+        NOT EXISTS (
+            SELECT * FROM guild_base_config WHERE guild_id = $1
+        )
+    RETURNING (guild_id, prefix))
+SELECT (guild_id::varchar, prefix) FROM guild_base_config WHERE guild_id = $1
+`
+    const { rows } = await pool.query(query, [guildId]);
+    const [row] = rows;
+    if (!row) {
+        throw Error("Guild Base Config not found!");
     }
-    return separoleConfig[serverId];
-    // return {
-    //     separole: {
-    //         top: "none",
-    //         mid: "keep",
-    //         midgroup: "all",
-    //         bottom: "none"
-    //     },
-    //     prefix: "s!"
-    // }
+    row.prefix = row.prefix || DEFAULT_PREFIX;
+    return row;
 }
 
-async function setSeparoleConfig(serverId, newConfig) {
-    separoleConfig[serverId] = newConfig;
+async function setBaseConfig(guildId, { prefix }) {
+    const query = `
+    UPDATE guild_base_config
+    SET prefix = $2
+    WHERE guild_id = $1;
+`
+    const { rows } = await pool.query(query, [guildId, prefix]);
+    return rows[0];
+}
+
+/**
+ * Assumes that the guild exists.
+ * @param {string} guildId The guild to obtain separole config from.
+ * @returns 
+ */
+async function getSeparoleConfig(guildId, withSeparoles = false) {
+    let query = `
+    SELECT (top, mid, midgroup, bottom)
+    FROM guild_separole_config
+    WHERE guild_id = $1;
+`
+    if (withSeparoles) {
+        query = `
+        SELECT (top, mid, midgroup, bottom, separoles::varchar[])
+        FROM guild_separole_config x
+        FULL OUTER JOIN guild_separoles y
+        ON x.guild_id = y.guild_id
+        WHERE x.guild_id = $1;
+        `
+    }
+    const { rows } = await pool.query(query, [guildId]);
+    if (rows.length === 0) {
+        const errorMessage = "The guild id supplied does not have a separole config entry in the database.";
+        logger.error({
+            msg: errorMessage,
+            guildId
+        })
+        throw Error(errorMessage);
+    }
+    const [row] = rows;
+    row.top = row.top || SEPAROLER_CONFIG_OPTIONS.TOP.DEFAULT;
+    row.mid = row.mid || SEPAROLER_CONFIG_OPTIONS.MID.DEFAULT;
+    row.midgroup = row.midgroup || SEPAROLER_CONFIG_OPTIONS.MIDGROUP.DEFAULT;
+    row.bottom = row.bottom || SEPAROLER_CONFIG_OPTIONS.BOTTOM.DEFAULT;
+    if (withSeparoles) {
+        row.separoles = row.separoles || [];
+    }
+    return row;
+}
+
+async function setSeparoleConfig(guildId, {
+    top,
+    mid,
+    midgroup,
+    bottom
+}) {
+    const query = `
+    UPDATE guild_separole_config
+    SET top = $2, mid = $3, midgroup = $4, bottom = $5
+    WHERE guild_id = $1;
+`
+    const arr = [guildId, top, mid, midgroup, bottom];
+    const { rows } = await pool.query(query, arr);
+    return rows[0];
 }
 
 // SEPAROLE LIST
-const separolesObj = {};
-async function getSeparoleList(serverId) {
-    if (!separolesObj[serverId]) {
-        separolesObj[serverId] = [];
-    }
-    return separolesObj[serverId];
+async function getSeparoleList(guildId) {
+    const query = `
+    SELECT (separoles::varchar[])
+    FROM guild_separoles
+    WHERE guild_id = $1;
+`
+    const { rows } = await pool.query(query, [guildId]);
+    const [row] = rows;
+    row.separoles = row.separoles || [];
+    return row;
 }
 
-async function setSeparoleList(serverId, separoleList) {
-    separolesObj[serverId] = separoleList;
-}
-
-const baseConfigs = {
-}
-async function getBaseConfig(guildId) {
-    if (!baseConfigs[guildId]) {
-        await setBaseConfig(guildId, {config: "s!"});
-    }
-    return baseConfigs[guildId];
-}
-
-async function setBaseConfig(guildId, config) {
-    baseConfigs[guildId] = config;
+async function setSeparoleList(guildId, separoleList) {
+    const query = `
+    UPDATE guild_separoles
+    SET separoles = $2
+    WHERE guild_id = $1;
+`
+    const arr = [guildId, separoleList];
+    const { rows } = await pool.query(query, arr);
+    return rows[0];
 }
 
 module.exports = {
