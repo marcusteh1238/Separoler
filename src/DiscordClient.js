@@ -23,6 +23,4 @@ Object.entries(allListeners)
             .forEach(listener => client.on(eventName, listener));
 });
 
-client.login(process.env.BOT_TOKEN);
-
 module.exports = client;
