@@ -6,8 +6,7 @@ const { GuildMember, Permissions } = require("discord.js");
  * @param {GuildMember} member The guild member.
  */
 function isSeparoleManager(member) {
-    const highestRole = member.roles.highest;
-    return highestRole.permissions.has(Permissions.FLAGS.MANAGE_GUILD, true);
+    return member.hasPermission(Permissions.FLAGS.MANAGE_GUILD);
 }
 
 module.exports = isSeparoleManager;
