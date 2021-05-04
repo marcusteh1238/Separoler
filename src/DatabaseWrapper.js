@@ -20,7 +20,7 @@ async function getBaseConfig(guildId) {
     UNION
     SELECT prefix FROM new_row;
 `
-    const { rows } = await pool.query(query, [guildId]);
+    const { rows } = await pool.query(query, [guildId]).catch(handleError);
     const [row] = rows;
     if (!row) {
         throw Error("Guild Base Config not found!");
@@ -35,7 +35,7 @@ async function setBaseConfig(guildId, { prefix }) {
     SET prefix = $2
     WHERE guild_id = $1;
 `
-    const { rows } = await pool.query(query, [guildId, prefix]);
+    const { rows } = await pool.query(query, [guildId, prefix]).catch(handleError);
     return rows[0];
 }
 
@@ -59,7 +59,7 @@ async function getSeparoleConfig(guildId, withSeparoles = false) {
         WHERE x.guild_id = $1;
         `
     }
-    const {rows} = await pool.query(query, [guildId]);
+    const {rows} = await pool.query(query, [guildId]).catch(handleError);
     if (rows.length === 0) {
         const errorMessage = "The guild id supplied does not have a separole config entry in the database.";
         logger.error({
@@ -91,7 +91,7 @@ async function setSeparoleConfig(guildId, {
     WHERE guild_id = $1;
 `
     const arr = [guildId, top, mid, midgroup, bottom];
-    const { rows } = await pool.query(query, arr);
+    const { rows } = await pool.query(query, arr).catch(handleError);
     return rows[0];
 }
 
@@ -102,7 +102,7 @@ async function getSeparoleList(guildId) {
     FROM guild_separoles
     WHERE guild_id = $1;
 `
-    const { rows } = await pool.query(query, [guildId]);
+    const { rows } = await pool.query(query, [guildId]).catch(handleError);
     const [row] = rows;
     row.separoles = row.separoles || [];
     return row;
@@ -115,8 +115,18 @@ async function setSeparoleList(guildId, separoleList) {
     WHERE guild_id = $1;
 `
     const arr = [guildId, separoleList];
-    const { rows } = await pool.query(query, arr);
+    const { rows } = await pool.query(query, arr).catch(handleError);
     return rows[0];
+}
+
+function handleError(err) {
+    if (err) {
+        logger.error({
+            msg: "Error occurred while performing Database Query.",
+            err
+        })
+        throw err;
+    }
 }
 
 module.exports = {
