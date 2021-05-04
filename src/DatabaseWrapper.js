@@ -9,16 +9,16 @@ async function getBaseConfig(guildId) {
     const query = `
     WITH new_row as (
     INSERT INTO guild_base_config
-    (guild_id, prefix)
+    guild_id, prefix
     SELECT $1::varchar, NULL
     WHERE
         NOT EXISTS (
             SELECT * FROM guild_base_config WHERE guild_id = $1
         )
-    RETURNING (prefix))
-    SELECT (prefix) FROM guild_base_config WHERE guild_id = $1
+    RETURNING prefix)
+    SELECT prefix FROM guild_base_config WHERE guild_id = $1
     UNION
-    SELECT (prefix) FROM new_row;
+    SELECT prefix FROM new_row;
 `
     const { rows } = await pool.query(query, [guildId]);
     const [row] = rows;
@@ -46,20 +46,20 @@ async function setBaseConfig(guildId, { prefix }) {
  */
 async function getSeparoleConfig(guildId, withSeparoles = false) {
     let query = `
-    SELECT (top, mid, midgroup, bottom)
+    SELECT top, mid, midgroup, bottom
     FROM guild_separole_config
     WHERE guild_id = $1;
 `
     if (withSeparoles) {
         query = `
-        SELECT (top, mid, midgroup, bottom, separoles::varchar[])
+        SELECT top, mid, midgroup, bottom, separoles
         FROM guild_separole_config x
         FULL OUTER JOIN guild_separoles y
         ON x.guild_id = y.guild_id
         WHERE x.guild_id = $1;
         `
     }
-    const { rows } = await pool.query(query, [guildId]);
+    const {rows} = await pool.query(query, [guildId]);
     if (rows.length === 0) {
         const errorMessage = "The guild id supplied does not have a separole config entry in the database.";
         logger.error({
@@ -98,7 +98,7 @@ async function setSeparoleConfig(guildId, {
 // SEPAROLE LIST
 async function getSeparoleList(guildId) {
     const query = `
-    SELECT (separoles::varchar[])
+    SELECT separoles
     FROM guild_separoles
     WHERE guild_id = $1;
 `
