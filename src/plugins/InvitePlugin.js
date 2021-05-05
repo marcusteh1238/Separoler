@@ -1,3 +1,4 @@
+const { info_lavendar } = require("../helpers/colors");
 const { BOT_ID, BOT_PERMISSIONS, PLUGIN_TYPES } = require("../helpers/constants");
 const Plugin = require("../structs/Plugin");
 
@@ -7,7 +8,8 @@ async function handle(message) {
         content: "Thank you for using Separoler!",
         embed: {
             title: "Invite Me to your Server!",
-            description: `Click on [this link](${inviteLink}) to invite me to your server.`
+            description: `Click on [this link](${inviteLink}) to invite me to your server.`,
+            color: info_lavendar
         }
     });
 }
