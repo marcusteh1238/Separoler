@@ -9,7 +9,7 @@ async function getBaseConfig(guildId) {
     const query = `
     WITH new_row as (
     INSERT INTO guild_base_config
-    guild_id, prefix
+    (guild_id, prefix)
     SELECT $1::varchar, NULL
     WHERE
         NOT EXISTS (
