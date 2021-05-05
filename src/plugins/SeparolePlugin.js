@@ -2,6 +2,8 @@ const getCurrentSeparoles = require("../helpers/getCurrentSeparoles");
 const Plugin = require("../structs/Plugin");
 const viewSeparoles = require("./separole/view");
 const addSeparoles = require("./separole/add");
+const enableSeparoles = require("./separole/enable");
+const disableSeparoles = require("./separole/disable");
 const removeSeparoles = require("./separole/remove");
 const invalidCommand = require("../helpers/messages/invalidCommand");
 const { PLUGIN_TYPES } = require("../helpers/constants");
@@ -18,6 +20,12 @@ async function handle(message, args) {
     }
     if (["add"].includes(firstArg)) {
         return addSeparoles(message, args.slice(1), separoles)
+    }
+    if (["enable"].includes(firstArg)) {
+        return enableSeparoles(message, args.slice(1), separoles)
+    }
+    if (["disable"].includes(firstArg)) {
+        return disableSeparoles(message, args.slice(1), separoles)
     }
     if (["remove", "rm"].includes(firstArg)) {
         return removeSeparoles(message, args.slice(1), separoles)
