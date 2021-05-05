@@ -34,7 +34,7 @@ const constants = {
                 "lowest",
                 "highest"
             ],
-            DEFAULT: "all"
+            DEFAULT: "lowest"
         },
         BOTTOM: {
             FRIENDLY_NAME: "Bottom-most Separoles",
