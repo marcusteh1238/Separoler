@@ -20,7 +20,7 @@ async function getBaseConfig(guildId) {
     UNION
     SELECT prefix FROM new_row;
 `
-    const { rows } = await pool.query(query, [guildId]).catch(handleError);
+    const { rows } = await performQuery(query, [guildId], "getBaseConfig");
     const [row] = rows;
     if (!row) {
         throw Error("Guild Base Config not found!");
@@ -35,7 +35,7 @@ async function setBaseConfig(guildId, { prefix }) {
     SET prefix = $2
     WHERE guild_id = $1;
 `
-    const { rows } = await pool.query(query, [guildId, prefix]).catch(handleError);
+    const { rows } = await performQuery(query, [guildId, prefix], "setBaseConfig");
     return rows[0];
 }
 
@@ -59,7 +59,7 @@ async function getSeparoleConfig(guildId, withSeparoles = false) {
         WHERE x.guild_id = $1;
         `
     }
-    const {rows} = await pool.query(query, [guildId]).catch(handleError);
+    const {rows} = await performQuery(query, [guildId], "getSeparoleConfig");
     if (rows.length === 0) {
         const errorMessage = "The guild id supplied does not have a separole config entry in the database.";
         logger.error({
@@ -91,7 +91,7 @@ async function setSeparoleConfig(guildId, {
     WHERE guild_id = $1;
 `
     const arr = [guildId, top, mid, midgroup, bottom];
-    const { rows } = await pool.query(query, arr).catch(handleError);
+    const { rows } = await performQuery(query, arr, "setSeparoleConfig");
     return rows[0];
 }
 
@@ -102,7 +102,7 @@ async function getSeparoleList(guildId) {
     FROM guild_separoles
     WHERE guild_id = $1;
 `
-    const { rows } = await pool.query(query, [guildId]).catch(handleError);
+    const { rows } = await performQuery(query, [guildId], "getSeparoleList");
     const [row] = rows;
     row.separoles = row.separoles || [];
     return row;
@@ -115,16 +115,21 @@ async function setSeparoleList(guildId, separoleList) {
     WHERE guild_id = $1;
 `
     const arr = [guildId, separoleList];
-    const { rows } = await pool.query(query, arr).catch(handleError);
+    const { rows } = await performQuery(query, arr, "setSeparoleList");
     return rows[0];
 }
 
-function handleError(err) {
-    if (err) {
+async function performQuery(query, paramArray, funcName) {
+    try {
+        return pool.query(query, paramArray);
+    } catch (err) {
         logger.error({
             msg: "Error occurred while performing Database Query.",
+            funcName,
+            query,
+            paramArray,
             err
-        })
+        });
         throw err;
     }
 }
