@@ -14,7 +14,10 @@ const allListeners = requireAll({
 client.once("ready", () => {
     logger.info({
         msg: "Separoler is now ready to receive Discord Events."
-    })
+    });
+    client.user.setActivity("s!help", {
+        type: "PLAYING"
+    });
 });
 
 Object.entries(allListeners)
