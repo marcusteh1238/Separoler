@@ -22,7 +22,10 @@ const validPolicies = Object.keys(policiesAndFuncs);
  * @param {object} options.config config for the server, if already obtained.
  * @param {string[]} options.separoleStrArr array of separoles, if already obtained.
  */
-async function SeparoleHandler(guild, member, {separoleStrArr, config} = {}) {
+async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
+    if (!guild.me.hasPermission("MANAGE_ROLES")) {
+        return;
+    }
     const [separoles, serverConfig, serverRoleManager] = await Promise.all([
         getCurrentSeparoles(guild, separoleStrArr),
         getConfig(guild.id, config),
@@ -54,16 +57,16 @@ async function SeparoleHandler(guild, member, {separoleStrArr, config} = {}) {
         .concat(newMid)
         .concat(newBottom);
     const promises = [];
-
+    const botHighestRolePos = guild.me.roles.highest.position;
     const rolesToAdd = newEquippedSeparoles
-        .filter(({ id }) => !currEquippedSeparoles.some(role => role.id === id))
+        .filter(({ id, position }) => botHighestRolePos > position && !currEquippedSeparoles.some(role => role.id === id))
         .map(({ id }) => id);
     if (rolesToAdd.length > 0) {
         promises.push(member.roles.add(rolesToAdd));
     }
     
     const rolesToRemove = currEquippedSeparoles
-        .filter(({ id }) => !newEquippedSeparoles.some(role => role.id === id))
+        .filter(({ id, position }) => botHighestRolePos > position && !newEquippedSeparoles.some(role => role.id === id))
         .map(({ id }) => id);
     if (rolesToRemove.length > 0) {
         promises.push(member.roles.remove(rolesToRemove));
