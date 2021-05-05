@@ -119,6 +119,30 @@ async function setSeparoleList(guildId, separoleList) {
     return rows[0];
 }
 
+async function isSeparolerEnabled(guildId) {
+    const query = `
+    SELECT is_global_enabled
+    FROM guild_separole_config
+    WHERE guild_id = $1
+`;
+    const arr = [guildId];
+    const { rows } = await performQuery(query, arr, "isSeparolerEnabled");
+    return rows[0]
+        ? rows[0].is_global_enabled
+        : true;
+}
+
+async function setSeparolerEnabled(guildId, isEnabled) {
+    const query = `
+    UPDATE guild_separole_config
+    SET is_global_enabled = $2
+    WHERE guild_id = $1;
+`;
+    const arr = [guildId, isEnabled];
+    const { rows } = await performQuery(query, arr, "setSeparolerEnabled");
+    return rows;
+}
+
 async function performQuery(query, paramArray, funcName) {
     try {
         return pool.query(query, paramArray);
@@ -140,5 +164,7 @@ module.exports = {
     getSeparoleList,
     setSeparoleList,
     getBaseConfig,
-    setBaseConfig
+    setBaseConfig,
+    isSeparolerEnabled,
+    setSeparolerEnabled
 }
