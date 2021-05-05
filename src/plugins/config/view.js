@@ -16,7 +16,8 @@ function viewConfig(message, config) {
             value
         }
         });
-    let description = `Here is the current configuration for **${message.guild.name}**. Each of these policies handle whether Separoles are kept or removed.`;
+    const isEnabledStr = config.is_global_enabled ? "enabled" : "disabled";
+    let description = `Separoles are currently **${isEnabledStr}.**\n\nHere is the current configuration for **${message.guild.name}**. Each of these policies handle whether Separoles are kept or removed.`;
     if (isRemMidGroup) {
         description = `${description}\n\n⚠️**NOTE:** Grouped Middle Separole policy is currently __disabled__ as all middle Separoles are already removed due to the Middle Separole policy.`
     }
