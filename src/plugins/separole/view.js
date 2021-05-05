@@ -13,7 +13,7 @@ async function viewSeparoles(message, separoles) {
             }
         })
     }
-    separoles.sort((roleA, roleB) => roleA.position - roleB.position);
+    separoles.sort((roleA, roleB) => roleB.position - roleA.position);
     const roleString = separoles.map((role, index) => {
         const mention = `<@&${role.id}>`;
         const pos = role.rawPosition;
