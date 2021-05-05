@@ -46,13 +46,13 @@ async function setBaseConfig(guildId, { prefix }) {
  */
 async function getSeparoleConfig(guildId, withSeparoles = false) {
     let query = `
-    SELECT top, mid, midgroup, bottom
+    SELECT top, mid, midgroup, bottom, is_global_enabled
     FROM guild_separole_config
     WHERE guild_id = $1;
 `
     if (withSeparoles) {
         query = `
-        SELECT top, mid, midgroup, bottom, separoles
+        SELECT top, mid, midgroup, bottom, separoles, is_global_enabled
         FROM guild_separole_config x
         FULL OUTER JOIN guild_separoles y
         ON x.guild_id = y.guild_id
@@ -73,6 +73,7 @@ async function getSeparoleConfig(guildId, withSeparoles = false) {
     row.mid = row.mid || SEPAROLER_CONFIG_OPTIONS.MID.DEFAULT;
     row.midgroup = row.midgroup || SEPAROLER_CONFIG_OPTIONS.MIDGROUP.DEFAULT;
     row.bottom = row.bottom || SEPAROLER_CONFIG_OPTIONS.BOTTOM.DEFAULT;
+    row.is_global_enabled = row.is_global_enabled !== undefined ? row.is_global_enabled : true;
     if (withSeparoles) {
         row.separoles = row.separoles || [];
     }
@@ -127,7 +128,7 @@ async function isSeparolerEnabled(guildId) {
 `;
     const arr = [guildId];
     const { rows } = await performQuery(query, arr, "isSeparolerEnabled");
-    return rows[0]
+    return rows[0] === undefined
         ? rows[0].is_global_enabled
         : true;
 }
