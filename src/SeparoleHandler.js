@@ -75,11 +75,11 @@ async function SeparoleHandler(guild, member, {separoleStrArr, config} = {}) {
         await Promise.all(promises);
         logger.debug(getDebugObj("Updating separoles", guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove));
     } catch (err) {
-        logger.error(getDebugObj("Error occurred when updating separoles", guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove));
+        logger.error(getDebugObj("Error occurred when updating separoles", guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove, err));
     }
 }
 
-function getDebugObj(msg, guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove) {
+function getDebugObj(msg, guild, member, separoles, currEquippedSeparoles, newEquippedSeparoles, rolesToAdd, rolesToRemove, err) {
     return {
         msg,
         guild: {
@@ -95,7 +95,8 @@ function getDebugObj(msg, guild, member, separoles, currEquippedSeparoles, newEq
         prevSeparoles: currEquippedSeparoles.map(({ id, name }) => ({ id, name })),
         newSeparoles: newEquippedSeparoles.map(({ id, name }) => ({ id, name })),
         rolesToAdd,
-        rolesToRemove
+        rolesToRemove,
+        err
     }
 }
 
