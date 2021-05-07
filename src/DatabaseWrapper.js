@@ -29,13 +29,13 @@ async function getBaseConfig(guildId) {
     return row;
 }
 
-async function setBaseConfig(guildId, { prefix }) {
+async function setPrefix(guildId, prefix) {
     const query = `
     UPDATE guild_base_config
     SET prefix = $2
     WHERE guild_id = $1;
 `
-    const { rows } = await performQuery(query, [guildId, prefix], "setBaseConfig");
+    const { rows } = await performQuery(query, [guildId, prefix], "setPrefix");
     return rows[0];
 }
 
@@ -165,7 +165,7 @@ module.exports = {
     getSeparoleList,
     setSeparoleList,
     getBaseConfig,
-    setBaseConfig,
+    setPrefix,
     isSeparolerEnabled,
     setSeparolerEnabled
 }
