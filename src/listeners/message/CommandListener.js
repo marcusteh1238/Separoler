@@ -5,6 +5,7 @@ const { getBaseConfig } = require("../../DatabaseWrapper");
 const HelpPlugin = require("../../structs/HelpPlugin");
 const logger = require("../../helpers/logger");
 
+const BOT_PREFIX = process.env.PREFIX;
 const mainRegex = " *([a-z0-9]+)(?: ((?:\\s|\\S)+))?$";
 
 const plugins = requireAll({
@@ -35,7 +36,7 @@ async function CommandListener(message) {
     const { prefix } = await getBaseConfig(message.guild.id);
     const match = message.content.match(
         new RegExp(
-            `^(?:${escapedRegex(prefix)})${mainRegex}`,
+            `^(?:(?:${escapedRegex(prefix)})|(?:${escapedRegex(BOT_PREFIX)}))${mainRegex}`,
             "i"
         )
     );
