@@ -2,12 +2,16 @@ const { setPrefix } = require("../DatabaseWrapper");
 const { success_green } = require("../helpers/colors");
 const { PLUGIN_TYPES } = require("../helpers/constants");
 const getUserAvatarURL = require("../helpers/getUserAvatarURL");
+const isSeparoleManager = require("../helpers/isSeparoleManager");
 const invalidAction = require("../helpers/messages/invalidAction");
 const Plugin = require("../structs/Plugin");
 
 const BOT_PREFIX = process.env.PREFIX;
 
 async function handle(message, args) {
+    if (!isSeparoleManager(message.member)) {
+        return invalidAction(message, `You need Manage Server Permissions to change the custom prefix for Separoler in **${message.guild.name}**.`)
+    }
     if (args.length === 0) {
         return invalidAction(message, "Please enter a custom prefix to set. Usage: `s!prefix <new prefix>`");
     }
