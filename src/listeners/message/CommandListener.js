@@ -5,7 +5,8 @@ const { getBaseConfig } = require("../../DatabaseWrapper");
 const HelpPlugin = require("../../structs/HelpPlugin");
 const logger = require("../../helpers/logger");
 
-const BOT_PREFIX = process.env.PREFIX;
+const { PREFIX, BOT_ID } = process.env;
+
 const mainRegex = " *([a-z0-9]+)(?: ((?:\\s|\\S)+))?$";
 
 const plugins = requireAll({
@@ -13,7 +14,8 @@ const plugins = requireAll({
     filter: /.+Plugin\.js$/
 });
 
-plugins.HelpPlugin = new HelpPlugin(plugins);
+const helpPlugin = new HelpPlugin(plugins);
+plugins.HelpPlugin = helpPlugin;
 
 const pluginActivators = Object.values(plugins).reduce((allActivators, plugin) => {
     const words = [plugin.name].concat(plugin.aliases);
@@ -32,11 +34,19 @@ const pluginActivators = Object.values(plugins).reduce((allActivators, plugin) =
     return allActivators;
 }, {});
 
+/**
+ * 
+ * @param {Discord.Message} message 
+ */
 async function CommandListener(message) {
+    if (isSeparolerMention(message.content)) {
+        helpPlugin.handle(message, []);
+        return;
+    }
     const { prefix } = await getBaseConfig(message.guild.id);
     const match = message.content.match(
         new RegExp(
-            `^(?:(?:${escapedRegex(prefix)})|(?:${escapedRegex(BOT_PREFIX)}))${mainRegex}`,
+            `^(?:(?:${escapedRegex(prefix)})|(?:${escapedRegex(PREFIX)}))${mainRegex}`,
             "i"
         )
     );
@@ -76,6 +86,13 @@ async function CommandListener(message) {
 
 function escapedRegex(s) {
     return s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+}
+
+function isSeparolerMention(content) {
+    const regex = /^<@!{0,1}(\d+)>$/;
+    const res = regex.exec(content);
+    if (!res) return false;
+    return res[1] === BOT_ID;
 }
 
 module.exports = CommandListener;
