@@ -35,19 +35,19 @@ async function handle(message) {
     })
 }
 
-const AboutMePlugin = new Plugin({
-    name: "aboutme",
-    aliases: ["about", "info"],
+const InfoPlugin = new Plugin({
+    name: "info",
+    aliases: ["about", "aboutme"],
     type: PLUGIN_TYPES[1],
     help: {
         description: "Let me tell you what I'm all about!",
-        usage: "s!aboutme",
+        usage: "s!info",
         examples: [
-            ["s!aboutme", "Views a summary about what Separoler does."]
+            ["s!info", "Views a summary about what Separoler does."]
         ]
     },
     handle,
     noDMs: false
 });
 
-module.exports = AboutMePlugin;
+module.exports = InfoPlugin;
