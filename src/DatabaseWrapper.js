@@ -99,39 +99,16 @@ async function setSeparoleConfig(guildId, {
 // SEPAROLE LIST
 async function getSeparoleList(guildId) {
     const query = `
-    SELECT separoles
-    FROM guild_separoles
-    WHERE guild_id = $1;
-`
-    const { rows } = await performQuery(query, [guildId], "getSeparoleList");
-    const [row] = rows;
-    row.separoles = row.separoles || [];
-    return row;
-}
-
-async function setSeparoleList(guildId, separoleList) {
-    const query = `
-    UPDATE guild_separoles
-    SET separoles = $2
-    WHERE guild_id = $1;
-`
-    const arr = [guildId, separoleList];
-    const { rows } = await performQuery(query, arr, "setSeparoleList");
-    return rows[0];
-}
-
-async function getSeparoleListV2(guildId) {
-    const query = `
     SELECT separole
     FROM guild_separoles_new
     WHERE guild_id = $1;
 `;
-    const { rows } = await performQuery(query, [guildId], "getSeparoleListV2");
+    const { rows } = await performQuery(query, [guildId], "getSeparoleList");
     const separoles = rows.map(({ separole }) => separole);
     return { separoles };
 }
 
-async function addAndRemoveSeparolesV2(guildId, separolesToAdd = [], separolesToRemove = []) {
+async function addAndRemoveSeparoles(guildId, separolesToAdd = [], separolesToRemove = []) {
     if (separolesToAdd.length + separolesToRemove.length === 0) {
         return;
     }
@@ -157,11 +134,11 @@ async function addAndRemoveSeparolesV2(guildId, separolesToAdd = [], separolesTo
     }
 }
 
-async function setSeparoleListV2(guildId, separoleList = []) {
-    const { separoles } = await getSeparoleListV2(guildId);
+async function setSeparoleList(guildId, separoleList = []) {
+    const { separoles } = await getSeparoleList(guildId);
     const separolesToAdd = separoleList.filter(s => !separoles.includes(s));
     const separolesToRemove = separoles.filter(s => !separoleList.includes(s));
-    return addAndRemoveSeparolesV2(guildId, separolesToAdd, separolesToRemove)
+    return addAndRemoveSeparoles(guildId, separolesToAdd, separolesToRemove)
 }
 
 async function isSeparolerEnabled(guildId) {
@@ -208,9 +185,7 @@ module.exports = {
     setSeparoleConfig,
     getSeparoleList,
     setSeparoleList,
-    getSeparoleListV2,
-    setSeparoleListV2,
-    addAndRemoveSeparolesV2,
+    addAndRemoveSeparoles,
     getBaseConfig,
     setPrefix,
     isSeparolerEnabled,

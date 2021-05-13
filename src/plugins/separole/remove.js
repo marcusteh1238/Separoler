@@ -1,5 +1,5 @@
 const Fuse = require("fuse.js");
-const { addAndRemoveSeparolesV2 } = require("../../DatabaseWrapper");
+const { addAndRemoveSeparoles } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
 const isSeparoleManager = require("../../helpers/isSeparoleManager");
@@ -33,7 +33,7 @@ async function removeSeparole(message, args, separoles) {
     }
     // is valid role, remove from DB.
     try {
-        await addAndRemoveSeparolesV2(message.guild.id, [], role.id)
+        await addAndRemoveSeparoles(message.guild.id, [], role.id)
     } catch (err) {
         logger.error({
             msg: "Error occurred when trying to remove separole.",

@@ -1,5 +1,5 @@
 const Fuse = require("fuse.js");
-const { addAndRemoveSeparolesV2 } = require("../../DatabaseWrapper");
+const { addAndRemoveSeparoles } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const { MAX_SEPAROLES } = require("../../helpers/constants");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
@@ -41,7 +41,7 @@ async function addSeparole(message, args, separoles) {
     }
     // is valid role, add to DB.
     try {
-        await addAndRemoveSeparolesV2(message.guild.id, [role.id], []);
+        await addAndRemoveSeparoles(message.guild.id, [role.id], []);
     } catch (err) {
         logger.error({
             msg: "Error occurred when trying to add new separole.",
