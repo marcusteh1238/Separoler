@@ -88,7 +88,7 @@ async function setSeparoleConfig(guildId, {
 async function getSeparoleList(guildId) {
     const query = `
     SELECT separole
-    FROM guild_separoles_new
+    FROM guild_separoles
     WHERE guild_id = $1;
 `;
     const { rows } = await performQuery(query, [guildId], "getSeparoleList");
@@ -104,12 +104,12 @@ async function addAndRemoveSeparoles(guildId, separolesToAdd = [], separolesToRe
     try {
         await client.query("BEGIN");
         if (separolesToRemove.length > 0) {
-            const delQuery = `DELETE FROM guild_separoles_new
+            const delQuery = `DELETE FROM guild_separoles
             WHERE guild_id = $1 AND separole = ANY($2);`
             await client.query(delQuery, [guildId, separolesToRemove]);
         }
         if (separolesToAdd.length > 0) {
-            const addQuery = `INSERT INTO guild_separoles_new (guild_id, separole)
+            const addQuery = `INSERT INTO guild_separoles (guild_id, separole)
             values($1, unnest($2::varchar[]));`
             await client.query(addQuery, [guildId, separolesToAdd]);
         }
