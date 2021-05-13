@@ -45,7 +45,7 @@ async function setPrefix(guildId, prefix) {
  * @returns 
  */
 async function getSeparoleConfig(guildId) {
-    let query = `
+    const query = `
     SELECT top, mid, midgroup, bottom, is_global_enabled
     FROM guild_separole_config
     WHERE guild_id = $1;
@@ -87,7 +87,7 @@ async function setSeparoleConfig(guildId, {
 // SEPAROLE LIST
 async function getSeparoleList(guildId) {
     const query = `
-    SELECT separole
+    SELECT DISTINCT separole
     FROM guild_separoles
     WHERE guild_id = $1;
 `;
@@ -102,7 +102,7 @@ async function addAndRemoveSeparoles(guildId, separolesToAdd = [], separolesToRe
     }
     const client = await pool.connect();
     try {
-        await client.query("BEGIN");
+        await client.query("BEGIN;");
         if (separolesToRemove.length > 0) {
             const delQuery = `DELETE FROM guild_separoles
             WHERE guild_id = $1 AND separole = ANY($2);`
@@ -113,7 +113,7 @@ async function addAndRemoveSeparoles(guildId, separolesToAdd = [], separolesToRe
             values($1, unnest($2::varchar[]));`
             await client.query(addQuery, [guildId, separolesToAdd]);
         }
-        await client.query("COMMIT");
+        await client.query("COMMIT;");
     } catch (e) {
         await client.query("ROLLBACK;")
         throw e;
@@ -153,6 +153,69 @@ async function setSeparolerEnabled(guildId, isEnabled) {
     return rows;
 }
 
+// SEPAROLE GROUPS
+async function getAllSeparoleGroups(guildId) {
+    const query = `
+SELECT guild_separoles.separole, guild_separole_dependant.role FROM guild_separoles
+LEFT JOIN guild_separole_dependant
+ON (
+	guild_separoles.guild_id = guild_separole_dependant.guild_id AND
+	guild_separoles.separole = guild_separole_dependant.separole
+)
+WHERE guild_separoles.guild_id = $1;`;
+    const { rows } = await performQuery(query, [guildId], "getAllSeparoleGroups");
+    return rows.reduce((obj, { separole, role }) => {
+        if (!obj[separole]) {
+            // eslint-disable-next-line no-param-reassign
+            obj[separole] = [];
+        }
+        if (role) {
+            obj[separole].push(role);
+        }
+        return obj;
+    }, {});
+}
+
+async function addAndRemoveSeparoleDependants(guildId, separoleId, rolesToAdd = [], rolesToRemove = []) {
+    if (rolesToAdd.length + rolesToRemove.length === 0) {
+        return;
+    }
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN;");
+        if (rolesToRemove.length > 0) {
+            const delQuery = `DELETE FROM guild_separole_dependant
+            WHERE guild_id = $1 AND separole = $2 AND role = ANY($3);`
+            await client.query(delQuery, [guildId, separoleId, rolesToRemove]);
+        }
+        if (rolesToAdd.length > 0) {
+            const valuesStr = rolesToAdd
+                .map((role, index) => `values($1, $2, $${index + 3})`)
+                .join('\n');
+            const addQuery = `INSERT INTO guild_separole_dependant (guild_id, separole, role)
+            ${valuesStr}`;
+            await client.query(addQuery, [guildId, separoleId].concat(rolesToAdd));
+        }
+        await client.query("COMMIT;");
+    } catch (e) {
+        await client.query("ROLLBACK;");
+        throw e;
+    } finally {
+        client.release();
+    }
+}
+
+async function setSeparoleGroup(guildId, separoleId, roleList = []) {
+    const groups = await getAllSeparoleGroups(guildId);
+    const group = groups[separoleId]
+    if (!group) {
+        return addAndRemoveSeparoleDependants(guildId, separoleId, roleList, [])
+    }
+    const rolesToAdd = roleList.filter(s => !group.includes(s));
+    const rolesToRemove = group.filter(s => !roleList.includes(s));
+    return addAndRemoveSeparoleDependants(guildId, separoleId, rolesToAdd, rolesToRemove);
+}
+
 async function performQuery(query, paramArray, funcName) {
     try {
         return pool.query(query, paramArray);
@@ -177,7 +240,10 @@ module.exports = {
     getBaseConfig,
     setPrefix,
     isSeparolerEnabled,
-    setSeparolerEnabled
+    setSeparolerEnabled,
+    getAllSeparoleGroups,
+    addAndRemoveSeparoleDependants,
+    setSeparoleGroup
 }
 
 // async function migrate() {
