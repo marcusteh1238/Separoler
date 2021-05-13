@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 const { Guild, Role } = require("discord.js");
-const { setSeparoleList, getSeparoleList } = require("../DatabaseWrapper");
+const { setSeparoleListV2, getSeparoleListV2 } = require("../DatabaseWrapper");
 
 /**
  * Get all currently present separoles for the guild. 
@@ -12,7 +12,7 @@ const { setSeparoleList, getSeparoleList } = require("../DatabaseWrapper");
 async function getCurrentSeparoles(guild, separolesList) {
     if (!separolesList) {
         // eslint-disable-next-line no-param-reassign
-        separolesList = (await getSeparoleList(guild.id)).separoles;
+        separolesList = (await getSeparoleListV2(guild.id)).separoles;
     }
     if (!separolesList || separolesList.length === 0) {
         return [];
@@ -25,7 +25,7 @@ async function getCurrentSeparoles(guild, separolesList) {
         return presentSeparoles;
     }
     const roleIds = presentSeparoles.map(role => role.id);
-    await setSeparoleList(guild.id, roleIds);
+    await setSeparoleListV2(guild.id, roleIds);
     return presentSeparoles;
 }
 

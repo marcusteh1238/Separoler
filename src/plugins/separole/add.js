@@ -1,5 +1,5 @@
 const Fuse = require("fuse.js");
-const { setSeparoleList } = require("../../DatabaseWrapper");
+const { addAndRemoveSeparolesV2 } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const { MAX_SEPAROLES } = require("../../helpers/constants");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
@@ -40,15 +40,14 @@ async function addSeparole(message, args, separoles) {
         return invalidAction(message, `The \`@everyone\` role cannot be a Separole.`);
     }
     // is valid role, add to DB.
-    const newSeparoleList = separoleIds.concat(role.id)
     try {
-        await setSeparoleList(message.guild.id, newSeparoleList)
+        await addAndRemoveSeparolesV2(message.guild.id, [role.id], []);
     } catch (err) {
         logger.error({
-            msg: "Error occurred when trying to set new separole list.",
+            msg: "Error occurred when trying to add new separole.",
             guild: message.guild.id,
             oldList: separoleIds,
-            newList: newSeparoleList
+            roleToAdd: role.id
         });
         return errorOccured(message, "Something went wrong while adding a new separole.");
     }

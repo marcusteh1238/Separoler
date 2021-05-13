@@ -1,5 +1,5 @@
 const Fuse = require("fuse.js");
-const { setSeparoleList } = require("../../DatabaseWrapper");
+const { addAndRemoveSeparolesV2 } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
 const isSeparoleManager = require("../../helpers/isSeparoleManager");
@@ -31,16 +31,15 @@ async function removeSeparole(message, args, separoles) {
     if (!separoleIds.includes(role.id)) {
         return invalidAction(message, `The role <@&${role.id}> is not a Separole!`);
     }
-    // is valid role, add to DB.
-    const newSeparoleList = separoleIds.filter(roleId => roleId !== role.id);
+    // is valid role, remove from DB.
     try {
-        await setSeparoleList(message.guild.id, newSeparoleList)
+        await addAndRemoveSeparolesV2(message.guild.id, [], role.id)
     } catch (err) {
         logger.error({
-            msg: "Error occurred when trying to set new separole list.",
+            msg: "Error occurred when trying to remove separole.",
             guild: message.guild.id,
             oldList: separoleIds,
-            newList: newSeparoleList
+            separoleToRemove: role.id
         });
         return errorOccured(message, "Something went wrong while removing a separole.");
     }
