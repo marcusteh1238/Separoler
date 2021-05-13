@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 const {Guild, GuildMember} = require("discord.js");
-const { getSeparoleConfig } = require("./DatabaseWrapper");
+const { getSeparoleConfig, getAllSeparoleGroups } = require("./DatabaseWrapper");
 const getCurrentSeparoles = require("./helpers/getCurrentSeparoles");
 const logger = require("./helpers/logger");
 
@@ -26,9 +26,10 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
     if (!guild.me.hasPermission("MANAGE_ROLES")) {
         return;
     }
-    const [separoles, serverConfig, serverRoleManager] = await Promise.all([
+    const [separoles, serverConfig, srGroups, serverRoleManager] = await Promise.all([
         getCurrentSeparoles(guild, separoleStrArr),
         getConfig(guild.id, config),
+        getAllSeparoleGroups(guild.id),
         guild.roles.fetch()
     ]);
     if (!serverConfig.is_global_enabled) {
@@ -41,9 +42,25 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
         .filter(ur => !separoles.some(sr => sr.id === ur.id))
     const currEquippedSeparoles = userRoles
         .filter(ur => separoles.some(sr => sr.id === ur.id))
+    
+    // const userWithAllSeparoles = userWithoutSeparoles
+    //     .map(({ id, position }) => ({ id, position, isSeparole: false }))
+    //     .concat(separoles.map(({ id, position }) => ({ id, position, isSeparole: true })));
+
+    // remove separoles if it has a group, and if the user does not have any equipped roles from that group.
+    const separolesThatHaveGroups = separoles
+        .filter(separole => {
+            const group = srGroups[separole.id];
+            // Default behavior: Everything below is part of the group.
+            if (group.length === 0) {
+                return true;
+            }
+            return group.some(roleId => userWithoutSeparoles.some(role => role.id === roleId));
+        })
+        .map(({ id, position }) => ({ id, position, isSeparole: true }));
     const userWithAllSeparoles = userWithoutSeparoles
         .map(({ id, position }) => ({ id, position, isSeparole: false }))
-        .concat(separoles.map(({ id, position }) => ({ id, position, isSeparole: true })));
+        .concat(separolesThatHaveGroups);
 
     userWithAllSeparoles.sort((role1, role2) => role2.position - role1.position);
     // separate into groups.
@@ -62,7 +79,7 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
     const promises = [];
     const botHighestRolePos = guild.me.roles.highest.position;
     const rolesToAdd = newEquippedSeparoles
-        .filter(({ id, position }) => botHighestRolePos > position && !currEquippedSeparoles.some(role => role.id === id))
+        .filter(({ id, position }) =>  botHighestRolePos > position && !currEquippedSeparoles.some(role => role.id === id))
         .map(({ id }) => id);
     if (rolesToAdd.length > 0) {
         promises.push(member.roles.add(rolesToAdd));
