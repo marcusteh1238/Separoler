@@ -1,4 +1,3 @@
-const Fuse = require("fuse.js");
 const { addAndRemoveSeparoles } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const { MAX_SEPAROLES } = require("../../helpers/constants");
@@ -7,6 +6,7 @@ const isSeparoleManager = require("../../helpers/isSeparoleManager");
 const logger = require("../../helpers/logger");
 const errorOccured = require("../../helpers/messages/errorOccurred");
 const invalidAction = require("../../helpers/messages/invalidAction");
+const searchRoles = require("../../helpers/searchRoles");
 
 async function addSeparole(message, args, separoles) {
     if (!isSeparoleManager(message.member)) {
@@ -47,7 +47,8 @@ async function addSeparole(message, args, separoles) {
             msg: "Error occurred when trying to add new separole.",
             guild: message.guild.id,
             oldList: separoleIds,
-            roleToAdd: role.id
+            roleToAdd: role.id,
+            err
         });
         return errorOccured(message, "Something went wrong while adding a new separole.");
     }
@@ -63,17 +64,6 @@ async function addSeparole(message, args, separoles) {
         }
     });
     
-}
-
-function searchRoles(roles, queryString) {
-    const fromId = roles.find(role => role.id === queryString);
-    if (fromId) {
-        return fromId;
-    }
-    const fuse = new Fuse(roles, { keys: ["name"], limit: 1 });
-    const [result] = fuse.search(queryString);
-    if (!result) return result;
-    return roles[result.refIndex];
 }
 
 module.exports = addSeparole

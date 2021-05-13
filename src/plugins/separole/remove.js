@@ -1,4 +1,3 @@
-const Fuse = require("fuse.js");
 const { addAndRemoveSeparoles } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
@@ -6,6 +5,7 @@ const isSeparoleManager = require("../../helpers/isSeparoleManager");
 const logger = require("../../helpers/logger");
 const errorOccured = require("../../helpers/messages/errorOccurred");
 const invalidAction = require("../../helpers/messages/invalidAction");
+const searchRoles = require("../../helpers/searchRoles");
 
 async function removeSeparole(message, args, separoles) {
     if (!isSeparoleManager(message.member)) {
@@ -33,13 +33,14 @@ async function removeSeparole(message, args, separoles) {
     }
     // is valid role, remove from DB.
     try {
-        await addAndRemoveSeparoles(message.guild.id, [], role.id)
+        await addAndRemoveSeparoles(message.guild.id, [], [role.id])
     } catch (err) {
         logger.error({
             msg: "Error occurred when trying to remove separole.",
             guild: message.guild.id,
             oldList: separoleIds,
-            separoleToRemove: role.id
+            separoleToRemove: role.id,
+            err
         });
         return errorOccured(message, "Something went wrong while removing a separole.");
     }
@@ -55,17 +56,6 @@ async function removeSeparole(message, args, separoles) {
         }
     });
     
-}
-
-function searchRoles(roles, queryString) {
-    const fromId = roles.find(role => role.id === queryString);
-    if (fromId) {
-        return fromId;
-    }
-    const fuse = new Fuse(roles, { keys: ["name"], limit: 1 });
-    const [result] = fuse.search(queryString);
-    if (!result) return result;
-    return roles[result.refIndex];
 }
 
 module.exports = removeSeparole
