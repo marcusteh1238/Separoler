@@ -120,6 +120,50 @@ async function setSeparoleList(guildId, separoleList) {
     return rows[0];
 }
 
+async function getSeparoleListV2(guildId) {
+    const query = `
+    SELECT separole
+    FROM guild_separoles_new
+    WHERE guild_id = $1;
+`;
+    const { rows } = await performQuery(query, [guildId], "getSeparoleListV2");
+    const separoles = rows.map(({ separole }) => separole);
+    return { separoles };
+}
+
+async function addAndRemoveSeparolesV2(guildId, separolesToAdd = [], separolesToRemove = []) {
+    if (separolesToAdd.length + separolesToRemove.length === 0) {
+        return;
+    }
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+        if (separolesToRemove.length > 0) {
+            const delQuery = `DELETE FROM guild_separoles_new
+            WHERE guild_id = $1 AND separole = ANY($2);`
+            await client.query(delQuery, [guildId, separolesToRemove]);
+        }
+        if (separolesToAdd.length > 0) {
+            const addQuery = `INSERT INTO guild_separoles_new (guild_id, separole)
+            values($1, unnest($2::varchar[]));`
+            await client.query(addQuery, [guildId, separolesToAdd]);
+        }
+        await client.query("COMMIT");
+    } catch (e) {
+        await client.query("ROLLBACK;")
+        throw e;
+    } finally {
+        client.release();
+    }
+}
+
+async function setSeparoleListV2(guildId, separoleList = []) {
+    const { separoles } = getSeparoleListV2(guildId);
+    const separolesToAdd = separoleList.filter(s => !separoles.includes(s));
+    const separolesToRemove = separoles.filter(s => !separoleList.includes(s));
+    return addAndRemoveSeparolesV2(guildId, separolesToAdd, separolesToRemove)
+}
+
 async function isSeparolerEnabled(guildId) {
     const query = `
     SELECT is_global_enabled
@@ -164,8 +208,34 @@ module.exports = {
     setSeparoleConfig,
     getSeparoleList,
     setSeparoleList,
+    getSeparoleListV2,
+    setSeparoleListV2,
+    addAndRemoveSeparolesV2,
     getBaseConfig,
     setPrefix,
     isSeparolerEnabled,
     setSeparolerEnabled
 }
+
+// async function migrate() {
+//     const query1 = `
+//     SELECT guild_id
+//     FROM guild_base_config;
+// `;
+//     const {rows} = await performQuery(query1, [], "blah");
+//     const allGuilds = rows.map(({ guild_id }) => guild_id);
+//     const promises = await Promise.all(allGuilds
+//         .map(async guildId => {
+//             const { separoles } = await getSeparoleList(guildId);
+//             await Promise.all(separoles.map(async separole => {
+//                 const query2 = `
+//                 INSERT INTO guild_separoles_new (guild_id, separole)
+//                 VALUES ($1, $2);
+//                 `
+//                 await performQuery(query2, [guildId, separole], "blah2");
+//             }))
+
+//         }))
+// }
+
+// migrate()
