@@ -44,22 +44,13 @@ async function setPrefix(guildId, prefix) {
  * @param {string} guildId The guild to obtain separole config from.
  * @returns 
  */
-async function getSeparoleConfig(guildId, withSeparoles = false) {
+async function getSeparoleConfig(guildId) {
     let query = `
     SELECT top, mid, midgroup, bottom, is_global_enabled
     FROM guild_separole_config
     WHERE guild_id = $1;
-`
-    if (withSeparoles) {
-        query = `
-        SELECT top, mid, midgroup, bottom, separoles, is_global_enabled
-        FROM guild_separole_config x
-        FULL OUTER JOIN guild_separoles y
-        ON x.guild_id = y.guild_id
-        WHERE x.guild_id = $1;
-        `
-    }
-    const {rows} = await performQuery(query, [guildId], "getSeparoleConfig");
+`;
+    const { rows } = await performQuery(query, [guildId], "getSeparoleConfig");
     if (rows.length === 0) {
         const errorMessage = "The guild id supplied does not have a separole config entry in the database.";
         logger.error({
@@ -74,9 +65,6 @@ async function getSeparoleConfig(guildId, withSeparoles = false) {
     row.midgroup = row.midgroup || SEPAROLER_CONFIG_OPTIONS.MIDGROUP.DEFAULT;
     row.bottom = row.bottom || SEPAROLER_CONFIG_OPTIONS.BOTTOM.DEFAULT;
     row.is_global_enabled = row.is_global_enabled !== undefined ? row.is_global_enabled : true;
-    if (withSeparoles) {
-        row.separoles = row.separoles || [];
-    }
     return row;
 }
 
