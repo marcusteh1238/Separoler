@@ -47,11 +47,11 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
 
     userWithAllSeparoles.sort((role1, role2) => role2.position - role1.position);
     // separate into groups.
-    const groups = getSeparoleGroups(userWithAllSeparoles);
+    const separated = getSeparated(userWithAllSeparoles);
     // apply policy based on server config to get roles that are supposed to be equipped.
-    const newBottom = performPolicyOnRoles(groups.bottom, serverConfig.bottom);
-    const newTop = performPolicyOnRoles(groups.top, serverConfig.top);
-    const newMid = performPolicyOnRoles(groups.mid, serverConfig.mid)
+    const newBottom = performPolicyOnRoles(separated.bottom, serverConfig.bottom);
+    const newTop = performPolicyOnRoles(separated.top, serverConfig.top);
+    const newMid = performPolicyOnRoles(separated.mid, serverConfig.mid)
         .map(arr => performPolicyOnRoles(arr, serverConfig.midgroup))
         .flat();
 
@@ -126,7 +126,7 @@ function performPolicyOnRoles(roles, option) {
     return policy(roles);
 }
 
-function getSeparoleGroups(rolesList) {
+function getSeparated(rolesList) {
     const allGroups = arraySplit(rolesList, role => !role.isSeparole);
     const top = allGroups.shift() || [];
     const bottom = allGroups.pop() || [];
