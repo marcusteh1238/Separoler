@@ -158,7 +158,7 @@ async function addAndRemoveSeparolesV2(guildId, separolesToAdd = [], separolesTo
 }
 
 async function setSeparoleListV2(guildId, separoleList = []) {
-    const { separoles } = getSeparoleListV2(guildId);
+    const { separoles } = await getSeparoleListV2(guildId);
     const separolesToAdd = separoleList.filter(s => !separoles.includes(s));
     const separolesToRemove = separoles.filter(s => !separoleList.includes(s));
     return addAndRemoveSeparolesV2(guildId, separolesToAdd, separolesToRemove)
