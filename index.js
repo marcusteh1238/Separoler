@@ -6,7 +6,7 @@ const { pool } = require("./src/db/Database");
 
 process.once('SIGUSR2', () => {
     pool.end()
-        .then(() => process.kill('SIGUSR2', 0))
+        .then(() => process.kill(0, 'SIGUSR2'))
         .catch(err => {
             logger.error({
                 msg: "Error occurred while ending PG connection.",
