@@ -1,14 +1,55 @@
 // s!group add <separole_id> <role id>
 // s!group remove <separole_id> <role id>
 
+const { getAllSeparoleGroups } = require("../DatabaseWrapper");
 const { PLUGIN_TYPES } = require("../helpers/constants");
+const invalidCommand = require("../helpers/messages/invalidCommand");
 const Plugin = require("../structs/Plugin");
+const addSeparoleGroup = require("./groups/add");
+const removeSeparoleGroup = require("./groups/remove");
 
 // s!group remove <separole_id> all
 // TODO: When adding role as a separole, check if that role is in a separole group. If so, throw an error.
 // TODO: When adding a role into a separole group, check if that role is an existing separole. If so, throw an error.
 async function handle(message, args) {
-    
+    const separoleGroups = await getAllSeparoleGroups(message.guild.id);
+    if (args.length === 0) {
+        return viewSeparoleGroups(message, separoleGroups)
+    }
+    const firstArg = args.shift().toLowerCase();
+    if (firstArg === "add") {
+        return addSeparoleGroup(message, args, separoleGroups);
+    }
+    if (["remove", "rm"].includes(firstArg)) {
+        return removeSeparoleGroup(message, args, separoleGroups);
+    }
+    return invalidCommand(message, "group");
+}
+
+/**
+ * 
+ * @param {Message} message 
+ * @param {*} separoleGroups 
+ */
+async function viewSeparoleGroups(message, separoleGroups) {
+    const entries = Object.entries(separoleGroups);
+    const fields = await Promise.all(entries
+        .map(async ([sr, grp]) => {
+            const grpStr = grp.length === 0
+                ? "No Group"
+                : grp.map(str => `<@&${str}>`).join("\n");
+            const separole = await message.guild.roles.fetch(sr)
+            return {
+                name: separole.name,
+                value: grpStr
+            }
+        }));
+    return message.channel.send({
+        content: "Viewing separole groups.",
+        embed: {
+            fields
+        }
+    });
 }
 
 const GroupPlugin = new Plugin({
