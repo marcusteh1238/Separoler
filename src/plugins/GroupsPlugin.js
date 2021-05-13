@@ -2,7 +2,9 @@
 // s!group remove <separole_id> <role id>
 
 const { getAllSeparoleGroups } = require("../DatabaseWrapper");
+const { info_lavendar } = require("../helpers/colors");
 const { PLUGIN_TYPES } = require("../helpers/constants");
+const getUserAvatarURL = require("../helpers/getUserAvatarURL");
 const invalidCommand = require("../helpers/messages/invalidCommand");
 const Plugin = require("../structs/Plugin");
 const addSeparoleGroup = require("./groups/add");
@@ -26,11 +28,6 @@ async function handle(message, args) {
     return invalidCommand(message, "group");
 }
 
-/**
- * 
- * @param {Message} message 
- * @param {*} separoleGroups 
- */
 async function viewSeparoleGroups(message, separoleGroups) {
     const entries = Object.entries(separoleGroups);
     const fields = await Promise.all(entries
@@ -41,13 +38,20 @@ async function viewSeparoleGroups(message, separoleGroups) {
             const separole = await message.guild.roles.fetch(sr)
             return {
                 name: separole.name,
-                value: grpStr
+                value: grpStr,
+                inline: true
             }
         }));
     return message.channel.send({
-        content: "Viewing separole groups.",
         embed: {
-            fields
+            title: "Viewing Separole Groups",
+            description: "Here is a list of your Separoles and their groups. If the Separole has a group, the Separole will only be added to a user if they have equipped any role in the Separole's group.",
+            color: info_lavendar,
+            fields,
+            footer: {
+                text: `Enter "s!groups add <separole> <role>" to add a role to the group of a separole.`,
+                icon_url: getUserAvatarURL(message.author)
+            }
         }
     });
 }
