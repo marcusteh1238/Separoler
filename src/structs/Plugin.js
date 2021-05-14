@@ -10,7 +10,7 @@ class Plugin {
         help,
         type,
         aliases = [],
-        cooldowns = [3, 3],
+        cooldowns = [3, 1], // normal user, donator
         noDMs = true
     }) {
         if (!help) {
