@@ -1,4 +1,4 @@
-const { addAndRemoveSeparoles } = require("../../DatabaseWrapper");
+const { addAndRemoveSeparoles, getAllSeparoleGroups } = require("../../DatabaseWrapper");
 const { success_green } = require("../../helpers/colors");
 const { MAX_SEPAROLES } = require("../../helpers/constants");
 const getUserAvatarURL = require("../../helpers/getUserAvatarURL");
@@ -38,6 +38,12 @@ async function addSeparole(message, args, separoles) {
     }
     if (roleManager.everyone.id === role.id) {
         return invalidAction(message, `The \`@everyone\` role cannot be a Separole.`);
+    }
+    const groups = await getAllSeparoleGroups(message.guild.id);
+    const isPartOfGroup = Object.entries(groups)
+        .find(([, group]) => group.includes(role.id));
+    if (isPartOfGroup) {
+        return invalidAction(message, `The role <@&${role.id}> is already part of a group for the Separole <@&${isPartOfGroup[0]}>!`);
     }
     // is valid role, add to DB.
     try {
