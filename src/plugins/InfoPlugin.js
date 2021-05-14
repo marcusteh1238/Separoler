@@ -39,6 +39,7 @@ const InfoPlugin = new Plugin({
     name: "info",
     aliases: ["about", "aboutme"],
     type: PLUGIN_TYPES[1],
+    cooldowns: [1, 1],
     help: {
         description: "Let me tell you what I'm all about!",
         usage: "s!info",

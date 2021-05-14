@@ -38,6 +38,7 @@ const SeparolePlugin = new Plugin({
     aliases: ["sr", "separole", "separoler", "eparole"],
     handle,
     type: PLUGIN_TYPES[0],
+    cooldowns: [3, 1],
     help: {
         description: "View the current list of Separoles, or edit the list of Separoles.",
         usage: "s!separoles [add <role> | remove <role>]",

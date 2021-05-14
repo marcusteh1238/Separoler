@@ -60,6 +60,7 @@ const GroupPlugin = new Plugin({
     name: "group",
     aliases: ["groups", "grp"],
     type: PLUGIN_TYPES[0],
+    cooldowns: [3, 1],
     help: {
         description: "Add roles to a Separole group, so that Separole only shows up when the user has those roles. By default, if there are no roles in a Separole's group, all roles below it belong to that Separole's group.",
         usage: "s!groups [add <separole> [role2] [role3]... | remove <separole> [role2] [role3]...]",

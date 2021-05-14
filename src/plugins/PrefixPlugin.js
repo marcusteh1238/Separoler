@@ -40,6 +40,7 @@ const PrefixPlugin = new Plugin({
     name: "prefix",
     aliases: [],
     type: PLUGIN_TYPES[0],
+    cooldowns: [5, 1],
     help: {
         description: "Set a custom prefix for Separoler commands in your server. The original prefix \"s!\" will still work.",
         usage: "s!prefix <new prefix>",

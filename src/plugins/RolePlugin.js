@@ -93,6 +93,7 @@ const RolePlugin = new Plugin({
     name: "role",
     aliases: [],
     type: PLUGIN_TYPES[1],
+    cooldowns: [5, 1],
     help: {
         description: "View information about a role. This includes Separoler-specific information like whether it's a Separole or in a Separole group.",
         usage: "s!role <role>",

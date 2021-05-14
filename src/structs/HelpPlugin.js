@@ -8,7 +8,7 @@ class HelpPlugin extends Plugin {
         const helpPluginObject = {
             name: "help",
             aliases: ["h"],
-            cooldowns: [5, 5],
+            cooldowns: [1, 1],
             noDMs: false,
             type: PLUGIN_TYPES[1],
             help: {

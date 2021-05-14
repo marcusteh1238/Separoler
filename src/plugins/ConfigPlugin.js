@@ -25,6 +25,7 @@ const ConfigPlugin = new Plugin({
     name: "config",
     aliases: ["configuration", "settings"],
     type: PLUGIN_TYPES[0],
+    cooldowns: [3, 1],
     help: {
         description: "View or edit the current Separoler policy settings for this server. Each policy specifies which Separoles to display on a user.",
         usage: "s!config [edit <policy> <setting>]",

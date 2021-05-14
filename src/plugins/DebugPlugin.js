@@ -85,6 +85,7 @@ const DebugPlugin = new Plugin({
     name: "debug",
     aliases: [],
     type: PLUGIN_TYPES[0],
+    cooldowns: [5, 1],
     help: {
         description: "View debug information about your Separoler setup.",
         usage: "s!debug",

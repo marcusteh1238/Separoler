@@ -18,6 +18,7 @@ const InvitePlugin = new Plugin({
     name: "invite",
     aliases: ["inv", "separoler"],
     type: PLUGIN_TYPES[1],
+    cooldowns: [1, 1],
     help: {
         description: "Get Separoler's Invite link so you can add me to your server :3",
         usage: "s!invite",
