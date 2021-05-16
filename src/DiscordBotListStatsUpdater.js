@@ -18,6 +18,9 @@ async function updateDBLStats() {
     lastUpdated = Date.now();
     try {
         const guildCount = parseInt(await getTotalGuildCount(), 10);
+        if (guildCount <= lastCount) {
+            return;
+        }
         await axios.post(url, {
             guilds: guildCount
         }, { headers });
