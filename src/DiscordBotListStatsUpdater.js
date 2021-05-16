@@ -19,7 +19,7 @@ async function updateDBLStats() {
     try {
         const guildCount = parseInt(await getTotalGuildCount(), 10);
         await axios.post(url, {
-            guilds: lastCount
+            guilds: guildCount
         }, { headers });
         logger.info({
             msg: "Updated number of guilds in Discord Bot List.",
