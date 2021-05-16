@@ -190,9 +190,9 @@ async function addAndRemoveSeparoleDependants(guildId, separoleId, rolesToAdd = 
         }
         if (rolesToAdd.length > 0) {
             const valuesStr = rolesToAdd
-                .map((role, index) => `values($1, $2, $${index + 3})`)
-                .join('\n');
-            const addQuery = `INSERT INTO guild_separole_dependant (guild_id, separole, role)
+                .map((role, index) => `($1, $2, $${index + 3})`)
+                .join(',\n');
+            const addQuery = `INSERT INTO guild_separole_dependant (guild_id, separole, role) VALUES
             ${valuesStr}`;
             await client.query(addQuery, [guildId, separoleId].concat(rolesToAdd));
         }
