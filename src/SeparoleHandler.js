@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 const {Guild, GuildMember} = require("discord.js");
-const { getSeparoleConfig, getAllSeparoleGroups } = require("./DatabaseWrapper");
+const { getSeparoleConfig, getAllSeparoleGroups, getBaseConfig } = require("./DatabaseWrapper");
 const getCurrentSeparoles = require("./helpers/getCurrentSeparoles");
 const logger = require("./helpers/logger");
 
@@ -26,6 +26,8 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
     if (!guild.me.hasPermission("MANAGE_ROLES")) {
         return;
     }
+    // just so we know that the bot alr has the server's config.
+    await getBaseConfig(guild.id);
     const [separoles, serverConfig, srGroups, serverRoleManager] = await Promise.all([
         getCurrentSeparoles(guild, separoleStrArr),
         getConfig(guild.id, config),
