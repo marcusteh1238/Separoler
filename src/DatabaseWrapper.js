@@ -39,6 +39,13 @@ async function setPrefix(guildId, prefix) {
     return rows[0];
 }
 
+async function getTotalGuildCount() {
+    const query = `
+        SELECT COUNT(*) from guild_base_config;
+    `
+    const { rows } = await performQuery(query, [], "getTotalGuildCount");
+    return rows[0].count;
+}
 /**
  * Assumes that the guild exists.
  * @param {string} guildId The guild to obtain separole config from.
@@ -234,6 +241,7 @@ async function performQuery(query, paramArray, funcName) {
 module.exports = {
     getSeparoleConfig,
     setSeparoleConfig,
+    getTotalGuildCount,
     getSeparoleList,
     setSeparoleList,
     addAndRemoveSeparoles,
