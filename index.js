@@ -15,4 +15,7 @@ process.once('SIGUSR2', () => {
         });
 });
 
+process.on("uncaughtException", err => logger.error(err));
+process.on("unhandledRejection", err => logger.error(err));
+
 DiscordClient.login(process.env.BOT_TOKEN);
