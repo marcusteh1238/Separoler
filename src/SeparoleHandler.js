@@ -31,7 +31,12 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
         getConfig(guild.id, config),
         getAllSeparoleGroups(guild.id),
         guild.roles.fetch()
-    ]);
+    ]).catch(err => {
+        logger.error({
+            msg: "Error occurred when trying to get separoler info in separoler handler.",
+            err
+        });
+    });
     if (!serverConfig.is_global_enabled) {
         return;
     }
