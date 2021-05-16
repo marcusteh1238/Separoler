@@ -238,6 +238,24 @@ async function performQuery(query, paramArray, funcName) {
     }
 }
 
+async function addUserToStat(userId) {
+    const query = `
+    INSERT INTO sr_users
+    (user_id)
+    VALUES ($1)
+    ON CONFLICT DO NOTHING;
+    `;
+    await performQuery(query, [userId], 'addUserToStat');
+    return {};
+}
+
+async function getSrUserCount() {
+    const query = `
+    SELECT COUNT(*) FROM sr_users`;
+    const { rows } = await performQuery(query, [], 'getSrUserCount');
+    return rows[0].count;
+}
+
 module.exports = {
     getSeparoleConfig,
     setSeparoleConfig,
@@ -251,7 +269,9 @@ module.exports = {
     setSeparolerEnabled,
     getAllSeparoleGroups,
     addAndRemoveSeparoleDependants,
-    setSeparoleGroup
+    setSeparoleGroup,
+    getSrUserCount,
+    addUserToStat
 }
 
 // async function migrate() {

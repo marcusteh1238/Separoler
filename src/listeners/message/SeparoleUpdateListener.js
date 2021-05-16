@@ -1,8 +1,10 @@
+const { addUserToStat } = require("../../DatabaseWrapper");
 const SeparoleHandler = require("../../SeparoleHandler")
 
 const { BOT_ID } = process.env;
 
 async function SeparoleUpdateListener(message) {
+    addUserToStat(message.author.id);
     if (!message.member) {
         return null;
     }
