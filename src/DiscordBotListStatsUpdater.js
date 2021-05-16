@@ -18,6 +18,10 @@ async function updateDBLStats() {
     lastUpdated = Date.now();
     try {
         const guildCount = parseInt(await getTotalGuildCount(), 10);
+        if (lastCount === 0) {
+            lastCount = guildCount;
+            return;
+        }
         if (guildCount <= lastCount) {
             return;
         }
