@@ -3,7 +3,11 @@ const { PLUGIN_TYPES } = require("../helpers/constants");
 const getUserAvatarURL = require("../helpers/getUserAvatarURL");
 const Plugin = require("../structs/Plugin");
 
-const description = `I am a small utility bot that handles **__Separ__ator __Role__s**, known as **Separoles**, in your server.`
+const description = `I am a small utility bot that handles **__Separ__ator __Role__s**, known as **Separoles**, in your server.
+
+Join the Community Support Server [here](${process.env.SUPPORT_SERVER_INVITE})!
+Support me by giving me an upvote on [Discord Bot List](https://discordbotlist.com/bots/separoler/upvote)!`
+
 const fields = [
     {
         name: "What are Separoles?",
@@ -29,7 +33,7 @@ async function handle(message) {
             color: colors.info_lavendar,
             footer: {
                 icon_url: getUserAvatarURL(message.author),
-                text: `Thanks for using Separoler, ${message.author.username}!`
+                text: `Created by: Markers Duh ʕ •́ᴥ•̀ʔ#1238`
             }
         }
     })
