@@ -82,14 +82,14 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
         .filter(({ id, position }) =>  botHighestRolePos > position && !currEquippedSeparoles.some(role => role.id === id))
         .map(({ id }) => id);
     if (rolesToAdd.length > 0) {
-        promises.push(member.roles.add(rolesToAdd));
+        promises.push(member.roles.add(rolesToAdd, "Adding Separole"));
     }
     
     const rolesToRemove = currEquippedSeparoles
         .filter(({ id, position }) => botHighestRolePos > position && !newEquippedSeparoles.some(role => role.id === id))
         .map(({ id }) => id);
     if (rolesToRemove.length > 0) {
-        promises.push(member.roles.remove(rolesToRemove));
+        promises.push(member.roles.remove(rolesToRemove, "Removing Separole"));
     }
 
     if (promises.length === 0) return;
