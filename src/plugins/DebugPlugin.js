@@ -28,7 +28,7 @@ async function handle(message) {
         fixHint = "Enable Separoler with \"s!enable\"!";
     }
     const description = getDescription(prefix, isEnabled, hasManageRolePerms);
-    separoles.sort((sr1, sr2) => sr1.position - sr2.position);
+    separoles.sort((sr1, sr2) => sr2.position - sr1.position);
     const fields = separoles.map(sr => {
         const isRolePosHigher = selfHighestRole.comparePositionTo(sr) > 0
         if (!fixHint && !isRolePosHigher) {
