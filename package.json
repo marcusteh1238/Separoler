@@ -18,6 +18,7 @@
     "pino-pretty": "^4.7.1"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "discord.js": "^12.5.3",
     "dotenv-safe": "^8.2.0",
     "fuse.js": "^6.4.6",
