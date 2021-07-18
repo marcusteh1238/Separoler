@@ -22,8 +22,10 @@
     "discord.js": "^12.5.3",
     "dotenv-safe": "^8.2.0",
     "fuse.js": "^6.4.6",
+    "node-cron": "^3.0.0",
     "pg": "^8.6.0",
     "pino": "^6.11.3",
-    "require-all": "^3.0.0"
+    "require-all": "^3.0.0",
+    "superagent": "^6.1.0"
   }
 }

@@ -1,5 +1,7 @@
 require("dotenv-safe").config();
 
+require("./src/CronRunner");
+
 const DiscordClient = require("./src/DiscordClient");
 const logger = require("./src/helpers/logger");
 const { pool } = require("./src/db/Database");
