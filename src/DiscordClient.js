@@ -4,7 +4,12 @@ const requireAll = require("require-all");
 
 const logger = require("./helpers/logger");
 
-const client = new Discord.Client();
+const client = new Discord.Client({
+    intents:[
+        Discord.Intents.FLAGS.GUILD_MEMBERS,
+        Discord.Intents.FLAGS.GUILD_INTEGRATIONS
+    ]
+});
 
 const allListeners = requireAll({
     dirname: path.resolve("src/listeners"),
