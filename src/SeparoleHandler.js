@@ -23,7 +23,7 @@ const validPolicies = Object.keys(policiesAndFuncs);
  * @param {string[]} options.separoleStrArr array of separoles, if already obtained.
  */
 async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
-    const me = guild.me || await guild.me.fetch();
+    const me = guild.me || await guild.members.fetch(process.env.BOT_ID);
     if (me && !me.permissions.has("MANAGE_ROLES")) {
         return;
     }
