@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.6.0",
     "dotenv-safe": "^8.2.0",
     "fuse.js": "^6.4.6",
     "pg": "^8.6.0",

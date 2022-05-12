@@ -50,7 +50,7 @@ async function handle(message) {
         ? `⚠️ ${fixHint}`
         : `✅ Separoler should be working fine and dandy!~`;
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Viewing Debug Information",
             description,
             fields,
@@ -59,7 +59,7 @@ async function handle(message) {
                 icon_url: getUserAvatarURL(message.author),
                 text: footerText
             }
-        }
+        }]
     });
 
 }

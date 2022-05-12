@@ -20,7 +20,7 @@ async function disableSeparoler(message) {
         return errorOccured(message, "Sorry, an error occurred while trying to disable Separoler.");
     }
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Successfully disabled Separole Management!",
             description: `The automatic addition and removal of Separoles is now disabled.`,
             color: success_green,
@@ -28,7 +28,7 @@ async function disableSeparoler(message) {
                 text: `Enable it again by entering "s!sr enable"!`,
                 icon_url: getUserAvatarURL(message.author)
             },
-        }
+        }]
     });
 }
 

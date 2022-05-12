@@ -26,7 +26,7 @@ const fields = [
 
 async function handle(message) {
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Hi, I am Separoler!",
             description,
             fields,
@@ -35,7 +35,7 @@ async function handle(message) {
                 icon_url: getUserAvatarURL(message.author),
                 text: `Created by: Markers Duh ʕ •́ᴥ•̀ʔ#1238`
             }
-        }
+        }]
     })
 }
 

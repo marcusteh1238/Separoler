@@ -22,7 +22,7 @@ function viewConfig(message, config) {
         description = `${description}\n\n⚠️**NOTE:** Grouped Middle Separole policy is currently __disabled__ as all middle Separoles are already removed due to the Middle Separole policy.`
     }
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Viewing Separoler Configuration",
             description,
             fields,
@@ -31,7 +31,7 @@ function viewConfig(message, config) {
                 iconURL: getUserAvatarURL(message.author),
                 text: `Enter "s!config edit <policy> <setting>" to change this server's Separoler configuration.`
             }
-        }
+        }]
     });
 }
 

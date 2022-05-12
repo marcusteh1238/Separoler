@@ -62,7 +62,7 @@ async function removeSeparoleGroup(message, args, separoleGroups) {
         return `${num}. ${mention}`;
     }).join('\n');
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Successfully removed roles from Separole Group!",
             color: success_green,
             fields: [
@@ -79,7 +79,7 @@ async function removeSeparoleGroup(message, args, separoleGroups) {
                 text: `View the current list of Separole groups by entering \`s!grouos\`!`,
                 icon_url: getUserAvatarURL(message.author)
             }
-        }
+        }]
     });
 }
 

@@ -43,7 +43,7 @@ async function viewSeparoleGroups(message, separoleGroups) {
             }
         }));
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Viewing Separole Groups",
             description: "Here is a list of your Separoles and their groups. If the Separole has a group, the Separole will only be added to a user if they have equipped any role in the Separole's group.",
             color: info_lavendar,
@@ -52,7 +52,7 @@ async function viewSeparoleGroups(message, separoleGroups) {
                 text: `Enter "s!groups add <separole> <role>" to add a role to the group of a separole.`,
                 icon_url: getUserAvatarURL(message.author)
             }
-        }
+        }]
     });
 }
 

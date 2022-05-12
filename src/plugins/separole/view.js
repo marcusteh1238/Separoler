@@ -6,11 +6,11 @@ async function viewSeparoles(message, separoles) {
     const avatarIcon = getUserAvatarURL(message.author)
     if (separoles.length === 0) {
         return message.channel.send({
-            embed: {
+            embeds: [{
                 title: "No Separoles to Display!",
                 color: unsure_yellow,
                 description: `Add some Separoles using \`s!separoles add <role_id>\`! You can currently add up to **${MAX_SEPAROLES.DEFAULT}** Separoles!`
-            }
+            }]
         })
     }
     separoles.sort((roleA, roleB) => roleB.position - roleA.position);
@@ -21,7 +21,7 @@ async function viewSeparoles(message, separoles) {
     }).join('\n');
     const footerText = `${message.guild.name} currently has ${separoles.length} out of ${MAX_SEPAROLES.DEFAULT} maximum allowed Separoles.`
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Current List of Separoles",
             description: roleString,
             color: info_lavendar,
@@ -29,7 +29,7 @@ async function viewSeparoles(message, separoles) {
                 text: footerText,
                 icon_url: avatarIcon
             }
-        }
+        }]
     });
 }
 

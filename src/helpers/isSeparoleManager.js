@@ -6,7 +6,7 @@ const { GuildMember, Permissions } = require("discord.js");
  * @param {GuildMember} member The guild member.
  */
 function isSeparoleManager(member) {
-    return member.hasPermission(Permissions.FLAGS.MANAGE_GUILD);
+    return member.permissions.has(Permissions.FLAGS.MANAGE_GUILD);
 }
 
 module.exports = isSeparoleManager;

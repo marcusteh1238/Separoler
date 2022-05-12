@@ -6,11 +6,11 @@ async function handle(message) {
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${BOT_ID}&permissions=${BOT_PERMISSIONS}&scope=bot`
     return message.channel.send({
         content: "Thank you for using Separoler!",
-        embed: {
+        embeds: [{
             title: "Invite Me to your Server!",
             description: `Click on [this link](${inviteLink}) to invite me to your server.`,
             color: info_lavendar
-        }
+        }]
     });
 }
 

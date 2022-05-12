@@ -20,7 +20,7 @@ async function enableSeparoler(message) {
         return errorOccured(message, "Sorry, an error occurred while trying to enable Separoler.");
     }
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Successfully enabled Separole Management!",
             description: `The automatic addition and removal of Separoles is now enabled.`,
             color: success_green,
@@ -28,7 +28,7 @@ async function enableSeparoler(message) {
                 text: `View the current list of Separoles by entering \`s!separoles\`!`,
                 icon_url: getUserAvatarURL(message.author)
             },
-        }
+        }]
     });
 }
 

@@ -45,11 +45,11 @@ async function editConfig(message, args, config) {
                 config: newConfig
             });
             return message.channel.send({
-                embed: {
+                embeds: [{
                     title: "Error Occurred!",
                     description: "Sorry, an error occurred while trying to change this server's Separoler configuration.",
                     color: error_red
-                }
+                }]
             });
         }
     }
@@ -66,11 +66,11 @@ async function editConfig(message, args, config) {
     ]
 
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Configuration Changed Successfully!",
             fields,
             color: success_green
-        }
+        }]
     })
 
 }

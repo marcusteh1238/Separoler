@@ -24,7 +24,7 @@ async function handle(message, args) {
     }
     await setPrefix(message.guild.id, newPrefix);
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Prefix Successfully Set!",
             description: `Separoler will now listen to commands on the prefix \`${newPrefix}\`, and on the default prefix \`${BOT_PREFIX}\``,
             color: success_green,
@@ -32,7 +32,7 @@ async function handle(message, args) {
                 icon_url: getUserAvatarURL(message.author),
                 text: `Prefix has been set by ${message.author.username}.`
             }
-        }
+        }]
     });
 }
 

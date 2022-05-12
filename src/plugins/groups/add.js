@@ -67,7 +67,7 @@ async function addSeparoleGroup(message, args, separoleGroups) {
         return `${num}. ${mention}`;
     }).join('\n');
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Successfully added new roles to a Separole Group!",
             color: success_green,
             fields: [
@@ -84,7 +84,7 @@ async function addSeparoleGroup(message, args, separoleGroups) {
                 text: `View the current list of Separole groups by entering \`s!grouos\`!`,
                 icon_url: getUserAvatarURL(message.author)
             }
-        }
+        }]
     });
 }
 

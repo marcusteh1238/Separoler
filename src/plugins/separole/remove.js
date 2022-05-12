@@ -45,7 +45,7 @@ async function removeSeparole(message, args, separoles) {
         return errorOccured(message, "Something went wrong while removing a separole.");
     }
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Successfully removed Separole!",
             description: `The role <@&${role.id}> is now not a separole. To remove this role from existing users, you will need to delete it and re-add it again.`,
             color: success_green,
@@ -53,7 +53,7 @@ async function removeSeparole(message, args, separoles) {
                 text: `View the current list of Separoles by entering \`s!separoles\`!`,
                 icon_url: getUserAvatarURL(message.author)
             },
-        }
+        }]
     });
     
 }

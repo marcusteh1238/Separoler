@@ -106,11 +106,11 @@ function sendCooldownMessage(message, cooldownStartTime, cooldownDurationSeconds
     const cooldownMs = cooldownDurationSeconds * 1000 - (Date.now() - cooldownStartTime);
     const cooldownSeconds = Math.ceil(cooldownMs / 1000)
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Sorry, you're on cooldown.",
             description: `**<@!${message.author.id}>**, please try again in \`${cooldownSeconds}\` seconds!`,
             color: error_red
-        }
+        }]
     });
 }
 

@@ -60,7 +60,7 @@ function viewParticularHelpMenu(message, plugin) {
         .join("\n\n");
     const aliasStr = plugin.aliases.map(alias => `\`${alias}\``).join(", ") || "None";
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: `s!${plugin.name}`,
             description: `**Aliases:** ${aliasStr}\n\`\`\`${description}\`\`\``,
             color: info_lavendar,
@@ -74,7 +74,7 @@ function viewParticularHelpMenu(message, plugin) {
                     value: exampleStr
                 }
             ]
-        }
+        }]
     });
 }
 
@@ -94,12 +94,12 @@ function viewHelpMainMenu(message, plugins) {
             };
         });
     return message.channel.send({
-        embed: {
+        embeds: [{
             title,
             description,
             fields,
             color: info_lavendar
-        }
+        }]
     })
 }
 

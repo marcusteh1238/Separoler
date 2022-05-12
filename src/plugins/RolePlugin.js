@@ -77,7 +77,7 @@ async function handle(message, args) {
         }
     ];
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Viewing Role Information",
             fields,
             color: role.color === 0 ? info_lavendar : role.color,
@@ -85,7 +85,7 @@ async function handle(message, args) {
                 icon_url: getUserAvatarURL(message.author),
                 text: `Created: ${role.createdAt}`
             }
-        }
+        }]
     });
 }
 

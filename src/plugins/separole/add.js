@@ -59,7 +59,7 @@ async function addSeparole(message, args, separoles) {
         return errorOccured(message, "Something went wrong while adding a new separole.");
     }
     return message.channel.send({
-        embed: {
+        embeds: [{
             title: "Successfully added new Separole!",
             description: `The role <@&${role.id}> has been successfully set as a Separole.`,
             color: success_green,
@@ -67,7 +67,7 @@ async function addSeparole(message, args, separoles) {
                 text: `View the current list of Separoles by entering \`s!separoles\`!`,
                 icon_url: getUserAvatarURL(message.author)
             },
-        }
+        }]
     });
     
 }
