@@ -24,10 +24,10 @@ const validPolicies = Object.keys(policiesAndFuncs);
  */
 async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
     await guild.members.fetch();
-    const me = guild.me || await guild.members.fetch(process.env.BOT_ID);
-    if (me && me.permissions && !me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
-        return;
-    }
+    // const me = guild.me || await guild.members.fetch(process.env.BOT_ID);
+    // if (me && me.permissions && !me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
+    //     return;
+    // }
     // just so we know that the bot alr has the server's config.
     await getBaseConfig(guild.id);
     const [separoles, serverConfig, srGroups, serverRoleManager] = await Promise.all([
