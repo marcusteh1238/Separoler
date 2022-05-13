@@ -20,7 +20,7 @@ async function addSeparoleGroup(message, args, separoleGroups) {
     if (!roleManager) {
         return invalidAction(message, "Sorry, this server does not have any roles!");
     }
-    const separole = searchRoles(roleManager.cache.array(), parseArg(args.shift()));
+    const separole = searchRoles(roleManager.cache, parseArg(args.shift()));
     if (!separole) {
         return invalidAction(message, "Please provide a valid role name or id.");
     }
@@ -32,7 +32,7 @@ async function addSeparoleGroup(message, args, separoleGroups) {
         return invalidAction(message, "After specifying the separole to edit the group of, specify role/s to add to the group.")
     }
     const rolesToAdd = args
-        .map(arg => searchRoles(roleManager.cache.array(), parseArg(arg)))
+        .map(arg => searchRoles(roleManager.cache, parseArg(arg)))
         .filter(role => role && role.id);
     if (rolesToAdd.length < args.length) {
         return invalidAction(message, "Please provide valid role names or ids as arguments, separated by a space.");

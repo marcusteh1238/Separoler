@@ -23,7 +23,7 @@ async function removeSeparole(message, args, separoles) {
     if (!roleManager) {
         return invalidAction(message, "Sorry, this server does not have any roles!");
     }
-    const role = searchRoles(roleManager.cache.array(), queryStr);
+    const role = searchRoles(roleManager.cache, queryStr);
     if (!role) {
         return invalidAction(message, "Please provide a valid role name or id.")
     }

@@ -44,7 +44,7 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
     if (!serverConfig.is_global_enabled) {
         return;
     }
-    const userRoles = member.roles.cache.array()
+    const userRoles = member.roles.cache
         .filter(role => role.id !== serverRoleManager.everyone.id); // everyone role not displayed.
     // assume all separoles equipped on user.
     const userWithoutSeparoles = userRoles
