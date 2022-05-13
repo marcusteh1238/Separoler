@@ -29,7 +29,9 @@ client.once("ready", () => {
 Object.entries(allListeners)
     .forEach(([eventName, eventListeners]) => {
         Object.values(eventListeners)
-            .forEach(listener => client.on(eventName, listener));
+            .forEach(listener => client.addListener(eventName, listener));
 });
+
+
 
 module.exports = client;
