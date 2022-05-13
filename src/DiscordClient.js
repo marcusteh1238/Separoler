@@ -7,7 +7,8 @@ const logger = require("./helpers/logger");
 const client = new Discord.Client({
     intents:[
         Discord.Intents.FLAGS.GUILD_MEMBERS,
-        Discord.Intents.FLAGS.GUILD_INTEGRATIONS
+        Discord.Intents.FLAGS.GUILD_INTEGRATIONS,
+        Discord.Intents.FLAGS.GUILD_MESSAGES
     ]
 });
 
