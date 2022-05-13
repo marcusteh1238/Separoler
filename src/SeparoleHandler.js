@@ -23,8 +23,9 @@ const validPolicies = Object.keys(policiesAndFuncs);
  * @param {string[]} options.separoleStrArr array of separoles, if already obtained.
  */
 async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
+    await guild.members.fetch();
     const me = guild.me || await guild.members.fetch(process.env.BOT_ID);
-    if (me && !me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
+    if (me && me.permissions && !me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
         return;
     }
     // just so we know that the bot alr has the server's config.
