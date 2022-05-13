@@ -30,7 +30,7 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
     // }
     // just so we know that the bot alr has the server's config.
     await getBaseConfig(guild.id);
-    const [separoles, serverConfig, srGroups, serverRoleManager] = await Promise.all([
+    const [separoles, serverConfig, srGroups] = await Promise.all([
         getCurrentSeparoles(guild, separoleStrArr),
         getConfig(guild.id, config),
         getAllSeparoleGroups(guild.id),
@@ -45,7 +45,7 @@ async function SeparoleHandler(guild, member, { separoleStrArr, config } = {}) {
         return;
     }
     const userRoles = member.roles.cache
-        .filter(role => role.id !== serverRoleManager.everyone.id); // everyone role not displayed.
+        .filter(role => role.id !== guild.roles.everyone.id); // everyone role not displayed.
     // assume all separoles equipped on user.
     const userWithoutSeparoles = userRoles
         .filter(ur => !separoles.some(sr => sr.id === ur.id))
